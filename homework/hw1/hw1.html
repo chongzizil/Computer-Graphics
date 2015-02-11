@@ -62,6 +62,8 @@ as possible :-)
     vec3 color_USUBENI = vec3(232. / 255., 122. / 255., 144. / 255.);
     vec3 color_WHITE = vec3(1., 1., 1.);
 
+    float growVar = mod(uTime, 1.);
+    outerSquareLength = outerSquareLength * growVar;
     float innerSquareDiameter = sqrt(pow((outerSquareLength / 2.), 2.) / 2.) * 2.;
     float radius = outerSquareLength / 2.;
 
@@ -114,7 +116,7 @@ as possible :-)
     float newY = y - (col * step + step / 2.);
 
     // Get the heart color
-    color = getHeart((step / 2.) * mod(uTime, 2.) / 2., newX, newY);
+    color = getHeart(step / 2., newX, newY);
 
     return color;
   }
