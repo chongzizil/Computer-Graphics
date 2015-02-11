@@ -1,0 +1,16 @@
+body {
+  background: #FCFAF2;
+}
+
+#title, #author, .sub-title {
+  text-align: center;
+}
+
+#button-panel {
+  text-align: center;
+  margin: 20px;
+}
+
+#show-box {
+  text-align: center;
+}

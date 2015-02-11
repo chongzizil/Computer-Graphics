@@ -1,13 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
+<html lang="en" ng-app="computerGraphics">
+<head>
+  <meta charset="utf-8">
+  <!--<meta Content-Type="text/csv"/>-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="This website holds the homework of Computer Graphics">
+  <meta name="author" content="Youlong Li">
+
+  <title>Computer Graphics</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <!-- Custom styles -->
+  <link href="app.css" rel="stylesheet">
 </head>
 <body>
-<h1>Computer Graphics</h1>
-<h2>Youlong Li</h2>
-<p>This is the homepage for future homework. This page is only for temporary use
-  until the next homework is out.</p>
+
+<h1 id="title">Computer Graphics</h1>
+<h2 id="author">Youlong Li</h2>
+
+<div id="button-panel">
+  <a href="#/hw1" class="btn btn-primary">HW1</a>
+</div>
+
+<hr/>
+
+<div id="show-box">
+  <ng-view></ng-view>
+</div>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<!--HW1-->
+<script src="app.js"></script>
+<script src="homework/hw1/hw1Ctrl.js"></script>
+<script src="homework/hw1/lib1.js"></script>
 </body>
 </html>

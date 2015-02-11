@@ -1,0 +1,135 @@
+<h2 class="sub-title">Lots of love for Valentine's Day :)</h2>
+
+<canvas id='canvas1' width='640' height='640'></canvas>
+
+<script id='my_vertex_shader' type='x-shader/x-vertex'>
+   attribute vec3 aPosition;
+   varying   vec3 vPosition;
+   void main() {
+      gl_Position = vec4(aPosition, 1.0);
+      vPosition = aPosition;
+   }
+
+</script>
+
+<!!==========================================================================
+
+Below is the fragment shader from class (with some slight improvements).
+
+Your assignment is to write your own interesting fragment shader program.
+Try to have fun with it -- use "uTime" to create animated patterns, and
+"uCursor" to make it responsive to a user's mouse gestures.
+
+Try to make something as completely different from my "easter egg" example
+as possible :-)
+
+============================================================================>
+
+<script id='my_fragment_shader' type='x-shader/x-fragment'>
+  precision mediump float;
+  uniform float uTime;
+  uniform vec3  uCursor;
+  varying vec3  vPosition;
+
+  // Get the halo color
+  vec3 getHalo(vec3 color, vec3 haloColor, float x, float y, float leftCenterX, float leftCenterY, float rightCenterX, float rightCenterY, float innerSquareDiameter, float radius, float animateVar) {
+    if (innerSquareDiameter * animateVar * 1.02 >= abs(x) + abs(y)
+        && innerSquareDiameter * animateVar * .98 <= abs(x) + abs(y)
+        && y < 0.) {
+      color = haloColor;
+    }
+
+    if (radius * animateVar * 1.02 >= sqrt(pow(x - leftCenterX * animateVar, 2.) + pow(y - leftCenterY * animateVar, 2.))
+        && radius * animateVar * .98 <= sqrt(pow(x - leftCenterX * animateVar, 2.) + pow(y - leftCenterY * animateVar, 2.))
+        && x < 0. && y > 0.) {
+      color = haloColor;
+    }
+
+    if (radius * animateVar * 1.02 >= sqrt(pow(x - rightCenterX * animateVar, 2.) + pow(y - rightCenterY * animateVar, 2.))
+        && radius * animateVar * .98 <= sqrt(pow(x - rightCenterX * animateVar, 2.) + pow(y - rightCenterY * animateVar, 2.))
+        && x > 0. && y > 0.) {
+      color = haloColor;
+    }
+
+    return color;
+  }
+
+  vec3 getHeart(float outerSquareLength, float x, float y) {
+    // Some constant and default color
+    float PI = 3.14159265358979323846264;
+    vec3 color = vec3(0., 0., 0.);
+    vec3 color_AKABENI = vec3(203. / 255., 65. / 255., 66. / 255.);
+    vec3 color_USUBENI = vec3(232. / 255., 122. / 255., 144. / 255.);
+    vec3 color_WHITE = vec3(1., 1., 1.);
+
+    float innerSquareDiameter = sqrt(pow((outerSquareLength / 2.), 2.) / 2.) * 2.;
+    float radius = outerSquareLength / 2.;
+
+    // Coordinates for both the circles
+    float leftCenterX = -sqrt(pow(outerSquareLength, 2.) / 2.) / 2.;
+    float leftCenterY = sqrt(pow(outerSquareLength, 2.) / 2.) / 2.;
+    float rightCenterX = sqrt(pow(outerSquareLength, 2.) / 2.) / 2.;
+    float rightCenterY = sqrt(pow(outerSquareLength, 2.) / 2.) / 2.;
+    float leftX = x - leftCenterX;
+    float leftY = y - leftCenterY;
+    float rightX = x - rightCenterX;
+    float rightY = y - rightCenterY;
+
+    // Set the heart
+    if (innerSquareDiameter > abs(x) + abs(y)) {
+      color = color_AKABENI;
+    }
+
+    if (radius > sqrt(pow(leftX, 2.) + pow(leftY, 2.))) {
+      color = color_AKABENI;
+    }
+
+    if (radius > sqrt(pow(rightX, 2.) + pow(rightY, 2.))) {
+      color = color_AKABENI;
+    }
+
+    // Set the halo... That's really to many parameters...
+    for (float i = 0.; i <= 1.; i += .2) {
+      color = getHalo(color, color_USUBENI, x, y, leftCenterX, leftCenterY, rightCenterX, rightCenterY, innerSquareDiameter, radius, mod(uTime + i, 1.));
+    }
+
+    return color;
+  }
+
+  // Get the hearts color
+  vec3 getHearts(float x, float y) {
+    // Set the default color to black.
+    vec3 color = vec3(0., 0., 0.);
+
+    // Get the number of rows, starts from 2
+    float numOfRow = floor(mod(uTime, 20.) / 1.);
+
+    // Get the row and column of that pixel
+    float row = floor(x / (1. / numOfRow));
+    float col = floor(y / (1. / numOfRow));
+    float step = (1. / numOfRow);
+
+    // New coordinate for a cell in that row and column
+    float newX = x - (row * step + step / 2.);
+    float newY = y - (col * step + step / 2.);
+
+    // Get the heart color
+    color = getHeart((step / 2.) * mod(uTime, 2.) / 2., newX, newY);
+
+    return color;
+  }
+
+  void main() {
+    float x = vPosition.x;
+    float y = vPosition.y;
+    vec3 color = getHearts(x, y);
+    gl_FragColor = vec4(color, 1.);
+  }
+</script>
+
+
+<script>
+  start_gl('canvas1', document.getElementById('my_vertex_shader').innerHTML,
+      document.getElementById('my_fragment_shader').innerHTML);
+</script>
+
