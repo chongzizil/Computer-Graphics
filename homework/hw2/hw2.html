@@ -72,8 +72,8 @@
       vec3 lightColor = Lrgb;     // rgb
       vec3 lightDirection = Ldir; // xyz
 
-      vec3 ambient = material / 10.;   // rgb
-      vec3 diffuse = vec3(.6, .6, .6);   // rgb
+      vec3 ambient = material / 8.;   // rgb
+      vec3 diffuse = material / .5;   // rgb
 
       // YOU NEED TO COMPUTE COLOR FOR A DIFFUSELY SHADED SPHERE.
 
@@ -101,7 +101,7 @@
       // YOU NEED TO SET x,y,z AND r FOR sphere.
       sphere[0] = vec4(.7 * cos(uTime), .7 * sin(uTime), -2.3, .28);
       sphere[1] = vec4(.7 * cos(uTime + PI), .7 * sin(uTime + PI), -2.3, .28);
-      sphere[2] = vec4(.7 * cos(uTime * 2.), .7 * sin(uTime * 2.), -2.6, .3);
+      sphere[2] = vec4(.8 * cos(uTime * 2.), .8 * sin(uTime * 2.), -2.6, .3);
 
       // YOU NEED TO SET r,g,b FOR material.
       material[0] = COLOR_KARAKURENAI;
