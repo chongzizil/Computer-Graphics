@@ -2,7 +2,7 @@ body {
   background: #FCFAF2;
 }
 
-#title, #author, .sub-title {
+#title, #author, .sub-title, .sub-description {
   text-align: center;
 }
 
