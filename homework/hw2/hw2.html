@@ -93,6 +93,14 @@
       return color;
    }
 
+   // From: http://stackoverflow.com/questions/4200224/random-noise-functions-for-glsl
+   float noise1D(vec3 co){
+       return fract(sin(dot(co.xx * 5., vec2(12.9898,78.233))) * 43758.5453);
+   }
+   float noise2D(vec3 co){
+       return fract(sin(dot(co.xy * 5., vec2(12.9898,78.233))) * 43758.5453);
+   }
+
    void main(void) {
       vec2 c = uCursor.xy;
 
@@ -137,19 +145,20 @@
       if (t1 == t && t1 < 10000.) {
         t = min(t, t1);
         color = shadeSphere(V + t1 * W, sphere[0], material[0]);
+        color *= (1. + sin(vPosition.x * 10.)) / 2.;
       }
       if (t2 == t && t2 < 10000.) {
         t = min(t, t2);
         color = shadeSphere(V + t2 * W, sphere[1], material[1]);
+        color *= (1. + sin((vPosition.x + noise2D(vPosition) / 2.) * 50.)) / 2.;
       }
       if (t3 == t && t3 < 10000.) {
         t = min(t, t3);
         color = shadeSphere(V + t3 * W, sphere[2], material[2]);
+        color *= noise1D(vPosition);
       }
 
       gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
-
-
    }
 </script>
 
