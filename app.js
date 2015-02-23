@@ -13,6 +13,10 @@ angular.module('computerGraphics', ['ngRoute']).config(['$routeProvider',
           templateUrl: 'homework/hw2/hw2.html',
           controller: 'hw2Ctrl'
         }).
+        when('/hw3', {
+          templateUrl: 'homework/hw3/hw3.html',
+          controller: 'hw3Ctrl'
+        }).
         otherwise({
           redirectTo: '/'
         });
