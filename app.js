@@ -6,16 +6,31 @@ angular.module('computerGraphics', ['ngRoute']).config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
         when('/hw1', {
-          templateUrl: 'homework/hw1/hw1.html',
-          controller: 'hw1Ctrl'
+          templateUrl: 'homework/hw1/hw1.html'
         }).
         when('/hw2', {
-          templateUrl: 'homework/hw2/hw2.html',
-          controller: 'hw2Ctrl'
+          templateUrl: 'homework/hw2/hw2.html'
         }).
-        when('/hw3', {
-          templateUrl: 'homework/hw3/hw3.html',
-          controller: 'hw3Ctrl'
+        when('/BlinnModel', {
+          templateUrl: 'homework/hw3/BlinnModel.html'
+        }).
+        when('/PhongModel', {
+          templateUrl: 'homework/hw3/PhongModel.html'
+        }).
+        when('/Reflection1', {
+          templateUrl: 'homework/hw3/Reflection1.html'
+        }).
+        when('/Reflection2', {
+          templateUrl: 'homework/hw3/Reflection2.html'
+        }).
+        when('/BooleanIntersection', {
+            templateUrl: 'homework/hw3/BooleanIntersection.html'
+        }).
+        when('/Matrix', {
+          templateUrl: 'homework/hw3/Matrix.html'
+        }).
+        when('/Bounce', {
+            templateUrl: 'homework/hw3/Bounce.html'
         }).
         otherwise({
           redirectTo: '/'

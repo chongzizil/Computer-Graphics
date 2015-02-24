@@ -1,3 +1,5 @@
+<h1>Reflection 2</h1>
+
 <body bgcolor=black>
 <td><canvas id='canvas1' width=600 height=600></canvas></td>
 </body>
@@ -17,12 +19,9 @@
   uniform vec3  uCursor;
   varying vec3  vPosition;
 
-  const int numOfSpheres = 25;
+  const int numOfSpheres = 7;
   vec4 sphere[numOfSpheres];
-  vec3 origin[numOfSpheres];
-  vec3 direction[numOfSpheres];
   vec3 material[numOfSpheres];
-  const float speedVar = .01;
 
   const int numOfLights = 1;
   vec3 Lrgb[numOfLights];
@@ -63,44 +62,39 @@
   }
 
   void setLights(vec2 c) {
-    Lrgb[0] = vec3(1., 1., 1.);
+    Lrgb[0] = vec3(.7, .7, .7);
     //Lrgb[1] = vec3(0., 0., 0.);
     //Lrgb[2] = vec3(1., 1., 1.);
     //Lrgb[3] = vec3(0., 0., 0.);
 
-    Ldir[0] = vec3(1., 1., 1. - 2. * dot(c, c));
+    Ldir[0] = vec3(c.x, c.y, 1. - 2. * dot(c, c));
     //Ldir[1] = vec3(-1., 1., 1. - 2. * dot(c, c));
     //Ldir[2] = vec3(-1., -1., 1. - 2. * dot(c, c));
     //Ldir[3] = vec3(1., -1., 1. - 2. * dot(c, c));
+
+    for (int i = 0; i < numOfLights; i++) {
+      Ldir[i] = normalize(Ldir[i]);
+    }
   }
 
   void setMaterial() {
-    for (int i = 0; i < numOfSpheres; i++) {
+    material[0] = vec3(1., 1., 1.);
+
+    for (int i = 1; i < numOfSpheres; i++) {
       material[i] = colors[int(mod(float(i), float(numOfColors)))];
     }
   }
 
   void setSphereMovements() {
-    for (int i = 0; i < numOfSpheres; i++) {
-      int row = i / 5;
-      float col = mod(float(i), 5.);
-      float x = -0.66 + float(row) * .33;
-      float y = -0.66 + col * .33;
-      origin[i] = vec3(x, y, -2.3);
-      direction[i] = vec3(1., 0., 0.);
-      sphere[i] = vec4(origin[i].xyz, .10);
-    }
+    sphere[0] = vec4(0., 0., -2.3, .40);
 
-    for (int i = 0; i < numOfSpheres; i++) {
-      vec3 direction = vec3(sphere[i].xy - uCursor.xy, 0.);
-      float distance = sqrt(pow((sphere[i].x - uCursor.x), 2.) + pow((sphere[i].y - uCursor.y), 2.));
-      if (distance < .3) {
-        //speedVar
-        float speedEnv = 10. * pow(.3 - distance, 1.);
-        vec3 newPos = speedEnv * direction;
-        sphere[i] = vec4(sphere[i].xy + newPos.xy, sphere[i].z, .10);
-      }
-    }
+    sphere[1] = vec4(.7 * cos(uTime), 0., -2.3 + .7 * sin(uTime), .10);
+    sphere[2] = vec4(0., .7 * cos(uTime + PI), -2.3 + .7 * sin(uTime + PI), .10);
+
+    sphere[6] = vec4(cos(1. * PI / 5.) * .9 * cos(uTime + 0. * PI / 2.), sin(1. * PI / 5.) * .9 * cos(uTime + 0. * PI / 2.), -2.3 + .9 * sin(uTime + 0. * PI / 2.), .10);
+    sphere[5] = vec4(cos(2. * PI / 5.) * .9 * cos(uTime + 3. * PI / 2.), sin(2. * PI / 5.) * .9 * cos(uTime + 3. * PI / 2.), -2.3 + .9 * sin(uTime + 3. * PI / 2.), .10);
+    sphere[4] = vec4(cos(3. * PI / 5.) * .9 * cos(uTime + 1. * PI / 2.), sin(3. * PI / 5.) * .9 * cos(uTime + 1. * PI / 2.), -2.3 + .9 * sin(uTime + 1. * PI / 2.), .10);
+    sphere[3] = vec4(cos(4. * PI / 5.) * .9 * cos(uTime + 2. * PI / 2.), sin(4. * PI / 5.) * .9 * cos(uTime + 2. * PI / 2.), -2.3 + .9 * sin(uTime + 2. * PI / 2.), .10);
   }
 
   // Compute intersection of a ray with a sphere, if any. Store the sphere,
@@ -133,31 +127,31 @@
   //    sphere is the x,y,z,r definition of the sphere.
   //    material is the r,g,b color of the sphere.
 
-  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material) {
-    vec3 N = (point - sphere.xyz) / sphere.w;
+  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material, vec3 W) {
+    vec3 N = normalize((point - sphere.xyz) / sphere.w);
 
     vec3 ambient = material / 5.;   // rgb
-    vec3 diffuse = material / .8;   // rgb
+    vec3 diffuse = material / .6;   // rgb
 
     vec3 color = ambient;
 
     for (int i = 0; i < numOfLights; i++) {
-      findSphere(point + .01 * Ldir[i], normalize(Ldir[i]));
+      vec3 rW = normalize(2. * dot(N, -W) * N - (-W));
+
+      findSphere(point + .01 * rW, rW);
 
       if (foundT == NOT_FOUND) {
-        color += Lrgb[i] * diffuse * max(0., dot(N, Ldir[i]));
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])));
+      } else {
+        point = point + foundT * Ldir[i];
+       // N = normalize((point - foundSphere.xyz) / foundSphere.w);
+        ambient = foundMaterial / 5.;   // rgb
+        diffuse = foundMaterial / .6;   // rgb
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])));
       }
     }
 
     return color;
-  }
-
-  // From: http://stackoverflow.com/questions/4200224/random-noise-functions-for-glsl
-  float noise1D(vec3 co){
-    return fract(sin(dot(co.xx * 5., vec2(12.9898,78.233))) * 43758.5453);
-  }
-  float noise2D(vec3 co){
-    return fract(sin(dot(co.xy * 5., vec2(12.9898,78.233))) * 43758.5453);
   }
 
   void main(void) {
@@ -188,14 +182,13 @@
       return;
     }
 
-
-    color = shadeSphere(V + foundT * W, foundSphere, foundMaterial);
+    color = shadeSphere(V + foundT * W, foundSphere, foundMaterial, W);
 
     gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
   }
 </script>
 
 <script>
-   start_gl('canvas1', document.getElementById('my_vertex_shader'  ).innerHTML,
-       document.getElementById('my_fragment_shader').innerHTML);
+  start_gl('canvas1', document.getElementById('my_vertex_shader'  ).innerHTML,
+          document.getElementById('my_fragment_shader').innerHTML);
 </script>

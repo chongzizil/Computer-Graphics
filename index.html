@@ -17,15 +17,34 @@
   <!-- Custom styles -->
   <link href="app.css" rel="stylesheet">
 </head>
-<body>
+<body ng-cloak ng-controller="mainCtrl">
 
 <h1 id="title">Computer Graphics</h1>
 <h2 id="author">Youlong Li</h2>
 
-<div id="button-panel">
+<div class="button-panel">
   <a href="#/hw1" class="btn btn-primary">HW1</a>
   <a href="#/hw2" class="btn btn-primary">HW2</a>
-  <a href="#/hw3" class="btn btn-primary">HW3</a>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      HW3<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#/Matrix">Matrix</a></li>
+      <li><a href="#/Bounce">Bounce</a></li>
+      <li class="divider"></li>
+      <li><a href="#/BlinnModel">Blinn</a></li>
+      <li><a href="#/PhongModel">Phone</a></li>
+      <li><a href="#/Reflection1">Reflection1</a></li>
+      <li><a href="#/Reflection2">Reflection2</a></li>
+      <li><a href="#/BooleanIntersection">BooleanIntersection</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="button-panel">
+  <button class="btn btn-primary" ng-click="reload()">Reload Page (In case everything get slow...)</button>
 </div>
 
 <hr/>
@@ -40,9 +59,7 @@
 <script src="bower_components/angular-route/angular-route.js"></script>
 <!--HW1-->
 <script src="app.js"></script>
-<script src="homework/hw1/hw1Ctrl.js"></script>
-<script src="homework/hw2/hw2Ctrl.js"></script>
-<script src="homework/hw3/hw3Ctrl.js"></script>
+<script src="mainCtrl.js"></script>
 <script src="homework/lib/lib1.js"></script>
 </body>
 </html>

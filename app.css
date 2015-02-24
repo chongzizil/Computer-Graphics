@@ -6,7 +6,7 @@ body {
   text-align: center;
 }
 
-#button-panel {
+.button-panel {
   text-align: center;
   margin: 20px;
 }
