@@ -1,4 +1,4 @@
-<h1>Bounce :)</h1>
+<h1>"Real" Bounce :) (For now it bounce at most 100 times and assume almost friction free.)</h1>
 
 <body bgcolor=black>
 <td><canvas id='canvas1' width=600 height=600></canvas></td>
@@ -23,7 +23,7 @@
   vec4 sphere[numOfSpheres];
   vec3 origin[numOfSpheres];
   vec3 material[numOfSpheres];
-  const float G = 10.;
+  const float G = 9.78 * .1;
 
   float floor = -3.;
   const vec3 FLOOR_COLOR = vec3(.3, .3, .3);
@@ -88,25 +88,63 @@
     }
   }
 
+  float getFreeDropDistance(float t) {
+    return .5 * G * pow(t, 2.);
+  }
+
+  float getBounceDistance(float v, float t) {
+    return v * t - G * pow(t, 2.) / 2.;
+  }
+
+  float getFreeDropTime(float h) {
+    return sqrt(2. * h / G);
+  }
+
+  float getBounceToStillTime(float bounceVelocity) {
+    return bounceVelocity / G;
+  }
+
+  float getSpeed(float t) {
+      return G * t;
+  }
+
   void setSphereMovements() {
     for (int i = 0; i < numOfSpheres; i++) {
-      float period = mod(uTime,  6.);
-      float times = uTime / 6. + 1.;
-      float offsetY = 0.;
-      float height = 1.;
-      float tanVar = tan(2. * height / 9.);
-            float friction = pow(.9, times);
+      float currTime = uTime;
+      float initMaxHeight = 1.;
+      float maxHeight = initMaxHeight;
+      float bounceCount = 1.;
+      float friction = .9999;
+      float dropTime;
+      float maxV; // * friction = Bounce speed with different direction
+      float bounceTime;
+      int limitTimes = 0;
 
-      if (period < 3.) {
-       sphere[i] = vec4(0., 0., -2.8 + height, .2);
-        // Dropping..
-        offsetY = tanVar * pow(period, 2.) / 2.;
-        sphere[i].z -= offsetY;
+      for(int limitTimes = 0; limitTimes < 100; limitTimes++) {
+        dropTime = getFreeDropTime(maxHeight);
+        maxV = getSpeed(dropTime);
+        maxV = maxV * pow(friction, bounceCount);
+        maxHeight = pow(maxV, 2.) / (2. * G);
+        bounceTime = getBounceToStillTime(maxV);
+
+        if (currTime < dropTime + bounceTime) {
+          break;
+        }
+        currTime -= dropTime + bounceTime;
+        bounceCount += 1.;
+      }
+
+      sphere[i] = vec4(0., 0., -2.79, .2); // On the floor.
+
+      if (currTime <= dropTime) {
+        // Dropping down
+        float droppedDistance = getFreeDropDistance(currTime);
+        sphere[i].z = sphere[i].z + (maxHeight - droppedDistance);
       } else {
-        sphere[i] = vec4(0., 0., -2.8, .2);
-        // Bouncing
-        offsetY = height - tanVar * pow(6. - period, 2.) / 2.;
-        sphere[i].z += offsetY;
+        // Bouncing up
+        currTime = currTime - dropTime;
+        float bouncedDistance = getBounceDistance(maxV, currTime);
+        sphere[i].z = sphere[i].z + bouncedDistance;
       }
     }
   }
@@ -214,3 +252,8 @@
     start_gl('canvas1', document.getElementById('my_vertex_shader'  ).innerHTML,
             document.getElementById('my_fragment_shader').innerHTML);
 </script>
+
+H = 1/2 * G * t^2
+    sqrt(2H / G)
+v = G * t;
+-v * frict = -v';
