@@ -20,14 +20,14 @@
   uniform vec3  uCursor;
   varying vec3  vPosition;
 
-  const int numOfSpheres = 1;
+  const int numOfSpheres = 3;
   vec4 sphere[numOfSpheres];
   vec3 origin[numOfSpheres];
   vec3 material[numOfSpheres];
-  const float G = 9.78 * .1;
+  float G[3];
 
   float floor = -3.;
-  const vec3 FLOOR_COLOR = vec3(.3, .3, .3);
+  const vec3 FLOOR_COLOR = vec3(1., 1., 1.);
 
   const int numOfLights = 1;
   vec3 Lrgb[numOfLights];
@@ -69,12 +69,12 @@
 
   void setLights(vec2 c) {
     Lrgb[0] = vec3(1., 1., 1.);
-    //Lrgb[1] = vec3(0., 0., 0.);
+    //Lrgb[1] = vec3(1., 1., 1.);
     //Lrgb[2] = vec3(1., 1., 1.);
     //Lrgb[3] = vec3(0., 0., 0.);
 
-    Ldir[0] = vec3(c.x, c.y, 1.);
-    //Ldir[1] = vec3(-1., 1., 1. - 2. * dot(c, c));
+    Ldir[0] = vec3(c.x, c.y, 1. - 2. * dot(c, c));
+    //Ldir[1] = vec3(c.x, -c.y, 1. - 2. * dot(c, c));
     //Ldir[2] = vec3(-1., -1., 1. - 2. * dot(c, c));
     //Ldir[3] = vec3(1., -1., 1. - 2. * dot(c, c));
 
@@ -89,44 +89,51 @@
     }
   }
 
-  float getFreeDropDistance(float t) {
+  float getFreeDropDistance(float t, float G) {
     return .5 * G * pow(t, 2.);
   }
 
-  float getBounceDistance(float v, float t) {
+  float getBounceDistance(float v, float t, float G) {
     return v * t - G * pow(t, 2.) / 2.;
   }
 
-  float getFreeDropTime(float h) {
+  float getFreeDropTime(float h, float G) {
     return sqrt(2. * h / G);
   }
 
-  float getBounceToStillTime(float bounceVelocity) {
+  float getBounceToStillTime(float bounceVelocity, float G) {
     return bounceVelocity / G;
   }
 
-  float getSpeed(float t) {
+  float getSpeed(float t, float G) {
       return G * t;
   }
 
   void setSphereMovements() {
+    sphere[0] = vec4(-.6, 0., -2.78, .2); // On the floor.
+    sphere[1] = vec4(0., 0., -2.78, .2); // On the floor.
+    sphere[2] = vec4(.6, 0., -2.78, .2); // On the floor.
+    G[0] = 9.78 * .2;
+    G[1] = 9.78 * .1;
+    G[2] = 9.78 * .05;
+
     for (int i = 0; i < numOfSpheres; i++) {
       float currTime = uTime;
       float initMaxHeight = 1.;
       float maxHeight = initMaxHeight;
       float bounceCount = 1.;
-      float friction = .9999;
+      float friction = 1.;
       float dropTime;
       float maxV; // * friction = Bounce speed with different direction
       float bounceTime;
       int limitTimes = 0;
 
       for(int limitTimes = 0; limitTimes < 100; limitTimes++) {
-        dropTime = getFreeDropTime(maxHeight);
-        maxV = getSpeed(dropTime);
+        dropTime = getFreeDropTime(maxHeight, G[i]);
+        maxV = getSpeed(dropTime, G[i]);
         maxV = maxV * pow(friction, bounceCount);
-        maxHeight = pow(maxV, 2.) / (2. * G);
-        bounceTime = getBounceToStillTime(maxV);
+        maxHeight = pow(maxV, 2.) / (2. * G[i]);
+        bounceTime = getBounceToStillTime(maxV, G[i]);
 
         if (currTime < dropTime + bounceTime) {
           break;
@@ -135,16 +142,14 @@
         bounceCount += 1.;
       }
 
-      sphere[i] = vec4(0., 0., -2.79, .2); // On the floor.
-
       if (currTime <= dropTime) {
         // Dropping down
-        float droppedDistance = getFreeDropDistance(currTime);
+        float droppedDistance = getFreeDropDistance(currTime, G[i]);
         sphere[i].z = sphere[i].z + (maxHeight - droppedDistance);
       } else {
         // Bouncing up
         currTime = currTime - dropTime;
-        float bouncedDistance = getBounceDistance(maxV, currTime);
+        float bouncedDistance = getBounceDistance(maxV, currTime, G[i]);
         sphere[i].z = sphere[i].z + bouncedDistance;
       }
     }
@@ -180,19 +185,29 @@
   //    sphere is the x,y,z,r definition of the sphere.
   //    material is the r,g,b color of the sphere.
 
-  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material) {
+  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material, vec3 W) {
     vec3 N = normalize((point - sphere.xyz) / sphere.w);
 
-    vec3 ambient = material / 5.;   // rgb
-    vec3 diffuse = material / .8;   // rgb
+    vec3 ambient = material / 3.;   // rgb
+    vec3 diffuse = material / 1.;   // rgb
 
     vec3 color = ambient;
 
     for (int i = 0; i < numOfLights; i++) {
-      findSphere(point + .01 * Ldir[i], Ldir[i]);
+      vec3 rW = normalize(2. * dot(N, -W) * N - (-W));
+
+      findSphere(point + .01 * rW, rW);
 
       if (foundT == NOT_FOUND) {
-        vec3 H = (N + Ldir[i]) * .5;
+        vec3 H = (N + Ldir[i]) * .5; 
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
+      } else {
+        point = point + foundT * rW;
+        N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+        ambient = foundMaterial / 3.;   // rgb
+        diffuse = foundMaterial / 1.;   // rgb
+        vec3 H = (N + Ldir[i]) * .5; 
         color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
       }
     }
@@ -206,8 +221,15 @@
     for (int i = 0; i < numOfLights; i++) {
       findSphere(vec3(vPosition.xy, floor * 1.0001), Ldir[i]);
 
-      if (foundT != NOT_FOUND) {
-        color = vec3(0., 0., 0.);
+      if (foundT != NOT_FOUND) { 
+        vec3 point = vec3(vPosition.xy, floor) + Ldir[i] * foundT;      
+        vec3 N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+        vec3 ambient = foundMaterial / 3.;   // rgb
+        vec3 diffuse = foundMaterial / 1.;   // rgb
+        color = ambient;
+        vec3 H = (N + Ldir[i]) * .5; 
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])));
       }
     }
 
@@ -243,7 +265,7 @@
       return;
     }
 
-    color = shadeSphere(V + foundT * W, foundSphere, foundMaterial);
+    color = shadeSphere(V + foundT * W, foundSphere, foundMaterial, W);
 
     gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
   }

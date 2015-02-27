@@ -23,7 +23,7 @@
   vec4 sphere[numOfSpheres];
   vec3 material[numOfSpheres];
 
-  const int numOfLights = 1;
+  const int numOfLights = 4;
   vec3 Lrgb[numOfLights];
   vec3 Ldir[numOfLights];
 
@@ -62,15 +62,15 @@
   }
 
   void setLights(vec2 c) {
-    Lrgb[0] = vec3(.7, .7, .7);
-    //Lrgb[1] = vec3(0., 0., 0.);
-    //Lrgb[2] = vec3(1., 1., 1.);
-    //Lrgb[3] = vec3(0., 0., 0.);
+    Lrgb[0] = vec3(1., 1., 1.);
+    Lrgb[1] = vec3(1., 1., 1.);
+    Lrgb[2] = vec3(1., 1., 1.);
+    Lrgb[3] = vec3(1., 1., 1.);
 
-    Ldir[0] = vec3(c.x, c.y, 1. - 2. * dot(c, c));
-    //Ldir[1] = vec3(-1., 1., 1. - 2. * dot(c, c));
-    //Ldir[2] = vec3(-1., -1., 1. - 2. * dot(c, c));
-    //Ldir[3] = vec3(1., -1., 1. - 2. * dot(c, c));
+    Ldir[0] = vec3(1., 1., 1. - 2. * dot(c, c));
+    Ldir[1] = vec3(-1., 1., 1. - 2. * dot(c, c));
+    Ldir[2] = vec3(-1., -1., 1. - 2. * dot(c, c));
+    Ldir[3] = vec3(1., -1., 1. - 2. * dot(c, c));
 
     for (int i = 0; i < numOfLights; i++) {
       Ldir[i] = normalize(Ldir[i]);
@@ -78,7 +78,7 @@
   }
 
   void setMaterial() {
-    material[0] = vec3(1., 1., 1.);
+    material[0] = vec3(.1, .1, .1);
 
     for (int i = 1; i < numOfSpheres; i++) {
       material[i] = colors[int(mod(float(i), float(numOfColors)))];
@@ -86,7 +86,7 @@
   }
 
   void setSphereMovements() {
-    sphere[0] = vec4(0., 0., -2.3, .40);
+    sphere[0] = vec4(0., 0., -2.3, .50);
 
     sphere[1] = vec4(.7 * cos(uTime), 0., -2.3 + .7 * sin(uTime), .10);
     sphere[2] = vec4(0., .7 * cos(uTime + PI), -2.3 + .7 * sin(uTime + PI), .10);
@@ -130,8 +130,8 @@
   vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material, vec3 W) {
     vec3 N = normalize((point - sphere.xyz) / sphere.w);
 
-    vec3 ambient = material / 5.;   // rgb
-    vec3 diffuse = material / .6;   // rgb
+    vec3 ambient = material / 3.;   // rgb
+    vec3 diffuse = material / 1.;   // rgb
 
     vec3 color = ambient;
 
@@ -141,13 +141,16 @@
       findSphere(point + .01 * rW, rW);
 
       if (foundT == NOT_FOUND) {
-        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])));
+        vec3 H = (N + Ldir[i]) * .5; 
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
       } else {
-        point = point + foundT * Ldir[i];
-       // N = normalize((point - foundSphere.xyz) / foundSphere.w);
-        ambient = foundMaterial / 5.;   // rgb
-        diffuse = foundMaterial / .6;   // rgb
-        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])));
+        point = point + foundT * rW;
+        N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+        ambient = foundMaterial / 3.;   // rgb
+        diffuse = foundMaterial / 1.;   // rgb
+        vec3 H = (N + Ldir[i]) * .5; 
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
       }
     }
 

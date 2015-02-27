@@ -17,11 +17,8 @@ angular.module('computerGraphics', ['ngRoute']).config(['$routeProvider',
         when('/PhongModel', {
           templateUrl: 'homework/hw3/PhongModel.html'
         }).
-        when('/Reflection1', {
-          templateUrl: 'homework/hw3/Reflection1.html'
-        }).
-        when('/Reflection2', {
-          templateUrl: 'homework/hw3/Reflection2.html'
+        when('/Reflection', {
+          templateUrl: 'homework/hw3/Reflection.html'
         }).
         when('/BooleanIntersection', {
             templateUrl: 'homework/hw3/BooleanIntersection.html'
