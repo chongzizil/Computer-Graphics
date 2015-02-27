@@ -137,7 +137,7 @@
   //    sphere is the x,y,z,r definition of the sphere.
   //    material is the r,g,b color of the sphere.
 
-  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material) {
+  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material, vec3 W) {
     vec3 N = normalize((point - sphere.xyz) / sphere.w);
 
     vec3 ambient = material / 5.;   // rgb
@@ -146,9 +146,19 @@
     vec3 color = ambient;
 
     for (int i = 0; i < numOfLights; i++) {
-      findSphere(point + .01 * Ldir[i], Ldir[i]);
+      vec3 rW = normalize(2. * dot(N, -W) * N - (-W));
+
+      findSphere(point + .01 * rW, rW);
 
       if (foundT == NOT_FOUND) {
+        vec3 H = (N + Ldir[i]) * .5;
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
+      } else {
+        point = point + foundT * rW;
+        N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+        ambient = foundMaterial / 5.;   // rgb
+        diffuse = foundMaterial / .8;   // rgb
         vec3 H = (N + Ldir[i]) * .5;
         color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
       }
@@ -190,7 +200,7 @@
       return;
     }
 
-    color = shadeSphere(V + foundT * W, foundSphere, foundMaterial);
+    color = shadeSphere(V + foundT * W, foundSphere, foundMaterial, W);
 
     gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
   }
