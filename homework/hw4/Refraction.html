@@ -181,6 +181,9 @@
     findExit(point, newW);
 
     point = point + foundT * newW;
+    //N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+    newW = refract(newW, N, fractionIndex);
     //TODO: Fix the refraction
     findSphere(point + newW * .01, newW);
 

@@ -47,6 +47,9 @@ angular.module('computerGraphics', ['ngRoute']).config(['$routeProvider',
         when('/Triangle', {
           templateUrl: 'homework/hw4/Triangle.html'
         }).
+        when('/Hexagon', {
+            templateUrl: 'homework/hw4/Hexagon.html'
+        }).
         otherwise({
           redirectTo: '/Index'
         });

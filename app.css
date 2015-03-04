@@ -19,3 +19,7 @@ body {
   width: 200px;
   margin: auto;
 }
+
+p {
+  font-size: 12px;
+}
