@@ -50,6 +50,9 @@ angular.module('computerGraphics', ['ngRoute']).config(['$routeProvider',
         when('/Hexagon', {
             templateUrl: 'homework/hw4/Hexagon.html'
         }).
+        when('/WoodTexture', {
+          templateUrl: 'homework/hw4/WoodTexture.html'
+        }).
         otherwise({
           redirectTo: '/Index'
         });
