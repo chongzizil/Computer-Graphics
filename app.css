@@ -14,3 +14,8 @@ body {
 #show-box {
   text-align: center;
 }
+
+.index-image {
+  width: 200px;
+  margin: auto;
+}

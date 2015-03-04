@@ -1,0 +1,491 @@
+<h1>Cylinder</h1>
+<p>If there's intersection between the sphere and any cylinders, the sphere will change color.</p>
+<p>It's a simple game, try to move the sphere from top-left to bottom-right wihtout touching the cylinders.</p>
+
+<body bgcolor=black>
+<td><canvas id='canvas1' width=600 height=600></canvas></td>
+</body>
+
+<script id='my_vertex_shader' type='x-shader/x-vertex'>
+   attribute vec3 aPosition;
+   varying   vec3 vPosition;
+   void main() {
+      gl_Position = vec4(aPosition, 1.0);
+      vPosition = aPosition;
+   }
+</script>
+
+<script id='my_fragment_shader' type='x-shader/x-fragment'>
+  precision mediump float;
+  uniform float uTime;
+  uniform vec3  uCursor;
+  varying vec3  vPosition;
+
+  const float PI = 3.1415926535897932384626433832795;
+  const float NOT_FOUND = 1000.;
+  const float ambientVar = 1. / 5.;
+  const float diffuseVar = 1. / .75;
+  const float refrectVar = 1.23;
+
+  const int numOfSpheres = 1;
+  vec4 sphere[numOfSpheres];
+  vec3 material[numOfSpheres];
+  float sphereFractionIndex[numOfSpheres];
+
+  vec4 foundSphere;
+  vec3 foundMaterial;
+  float foundFractionIndex;
+  float foundT;
+
+  vec3 reflectRay;
+  vec3 refrectRay;
+
+  const int numOfLights = 1;
+  vec3 Lrgb[numOfLights];
+  vec3 Ldir[numOfLights];
+
+  vec4 cube[6];
+  float enterT = -1000.;
+  float exitT = 1000.;
+
+  const int numOfCylinders = 5;
+  vec4 cylinder[numOfCylinders];
+  vec2 cylinderGap[numOfCylinders];
+  vec3 cylinderMaterial[numOfCylinders];
+  vec3 cylinderInnerMaterial[numOfCylinders];
+  float CylinderFractionIndex[numOfCylinders];
+  vec4 foundCylinder;
+  vec2 foundCylinderGap;
+  vec3 foundCylinderMaterial;
+  vec3 foundCylinderInnerMaterial;
+  float foundCylinderFractionIndex;
+  float foundCylinderT;
+
+  // All colors come from: http://nipponcolors.com
+  const int numOfColors = 10;
+  vec3 colors[10];
+  const vec3 COLOR_KARAKURENAI = vec3(208. / 255., 16. / 255., 76. / 255.);
+  const vec3 COLOR_HANAASAGI = vec3(30. / 255., 136. / 255., 168. / 255.);
+  const vec3 COLOR_NAE = vec3(134. / 255., 193. / 255., 102. / 255.);
+  const vec3 COLOR_USUKOH = vec3(235. / 255., 180. / 255., 113. / 255.);
+  const vec3 COLOR_SHION = vec3(143. / 255., 119. / 255., 181. / 255.);
+  const vec3 COLOR_AONIBI = vec3(83. / 255., 89. / 255., 83. / 255.);
+  const vec3 COLOR_RURIKON = vec3(11. / 255., 52. / 255., 110. / 255.);
+  const vec3 COLOR_SAKURA = vec3(254. / 255., 223. / 255., 225. / 255.);
+  const vec3 COLOR_KIHADA = vec3(251. / 255., 226. / 255., 81. / 255.);
+  const vec3 COLOR_SENSAICHA = vec3(77. / 255., 81. / 255., 57. / 255.);
+
+  void setColors() {
+    colors[0] = COLOR_KARAKURENAI;
+    colors[1] = COLOR_HANAASAGI;
+    colors[2] = COLOR_NAE;
+    colors[3] = COLOR_USUKOH;
+    colors[4] = COLOR_SHION;
+    colors[5] = COLOR_AONIBI;
+    colors[6] = COLOR_RURIKON;
+    colors[7] = COLOR_SAKURA;
+    colors[8] = COLOR_KIHADA;
+    colors[9] = COLOR_SENSAICHA;
+  }
+
+  void setLights(vec2 c) {
+    Lrgb[0] = vec3(1., 1., 1.5);
+
+    Ldir[0] = vec3(1., 1., 1.);
+
+    for (int i = 0; i < numOfLights; i++) {
+      Ldir[i] = normalize(Ldir[i]);
+    }
+  }
+
+  void setMaterial() {
+    material[0] = COLOR_NAE;
+
+    for (int i = 1; i < numOfSpheres; i++) {
+      material[i] = colors[int(mod(float(i), float(numOfColors)))];
+    }
+  }
+
+  void setSphereMovements() {
+    sphere[0] = vec4(uCursor.x * 2.5, uCursor.y * 2.5, -5., .3);
+    //sphere[1] = vec4(0., -2.5 + mod(uTime + 2.5, 5.), -5., .3);
+
+    // sphere[1] = vec4(.7 * cos(uTime), 0., -2.3 + .7 * sin(uTime), .10);
+    // sphere[2] = vec4(0., .7 * cos(uTime + PI), -2.3 + .7 * sin(uTime + PI), .10);
+
+    // sphere[6] = vec4(cos(1. * PI / 5.) * .9 * cos(uTime + 0. * PI / 2.), sin(1. * PI / 5.) * .9 * cos(uTime + 0. * PI / 2.), -2.3 + .9 * sin(uTime + 0. * PI / 2.), .10);
+    // sphere[5] = vec4(cos(2. * PI / 5.) * .9 * cos(uTime + 3. * PI / 2.), sin(2. * PI / 5.) * .9 * cos(uTime + 3. * PI / 2.), -2.3 + .9 * sin(uTime + 3. * PI / 2.), .10);
+    // sphere[4] = vec4(cos(3. * PI / 5.) * .9 * cos(uTime + 1. * PI / 2.), sin(3. * PI / 5.) * .9 * cos(uTime + 1. * PI / 2.), -2.3 + .9 * sin(uTime + 1. * PI / 2.), .10);
+    // sphere[3] = vec4(cos(4. * PI / 5.) * .9 * cos(uTime + 2. * PI / 2.), sin(4. * PI / 5.) * .9 * cos(uTime + 2. * PI / 2.), -2.3 + .9 * sin(uTime + 2. * PI / 2.), .10);
+
+    for (int i = 0; i < numOfSpheres; i++) {
+      sphereFractionIndex[i] = refrectVar;
+    }
+  }
+
+  void setCylinder() {
+    cylinder[0] = vec4(-9999., 1.5, -5., .4);
+    cylinder[1] = vec4(2., -9999., -5., .4);
+    cylinder[2] = vec4(-9999., 0., -5., .4);
+    cylinder[3] = vec4(-2., -9999., -5., .4);
+    cylinder[4] = vec4(-9999., -1.5, -5., .4);
+    cylinderGap[0] = vec2(-1.5, 1.5); 
+    cylinderGap[1] = vec2(0.4, 1.1); 
+    cylinderGap[2] = vec2(-1.5, 1.5);
+    cylinderGap[3] = vec2(-1.1, -.4); 
+    cylinderGap[4] = vec2(-1.5, 1.5);
+    cylinderMaterial[0] = COLOR_KARAKURENAI;
+    cylinderMaterial[1] = COLOR_HANAASAGI;
+    cylinderMaterial[2] = COLOR_NAE;
+    cylinderMaterial[3] = COLOR_SHION;
+    cylinderMaterial[4] = COLOR_SENSAICHA;
+    cylinderInnerMaterial[0] = vec3(.2, .2, .2);
+    cylinderInnerMaterial[1] = vec3(.2, .2, .2);
+    cylinderInnerMaterial[2] = vec3(.2, .2, .2);
+    cylinderInnerMaterial[3] = vec3(.2, .2, .2);
+    cylinderInnerMaterial[4] = vec3(.2, .2, .2);
+    CylinderFractionIndex[0] = 1.;
+    CylinderFractionIndex[1] = 1.;
+    CylinderFractionIndex[2] = 1.;
+    CylinderFractionIndex[3] = 1.;
+    CylinderFractionIndex[4] = 1.;
+  }
+
+  // Compute intersection of a ray with a sphere, if any. Store the sphere,
+  // material and t for later usage.
+  // If there is no intersection, return default t which is 1000.
+  void findSphere(vec3 V, vec3 W) {
+    foundT = NOT_FOUND;
+
+    for (int i = 0; i < numOfSpheres; i++) {
+      float B = 2. * dot(W, V - sphere[i].xyz);
+      float C = dot(V - sphere[i].xyz, V - sphere[i].xyz) - pow(sphere[i].w, 2.);
+      float D = pow(B, 2.) - 4. * C;
+
+      if (D < 0.) {
+        continue;
+      }
+
+      float t = (-B - sqrt(D)) / 2.;
+
+      if (t >= 0. && t < foundT) {
+        foundT = t;
+        foundSphere = sphere[i];
+        foundMaterial = material[i];
+        foundFractionIndex = sphereFractionIndex[i];
+      }
+    }
+  }
+
+  void findExit(vec3 V, vec3 W) {
+    foundT = NOT_FOUND;
+
+    for (int i = 0; i < numOfSpheres; i++) {
+      float B = 2. * dot(W, V - sphere[i].xyz);
+      float C = dot(V - sphere[i].xyz, V - sphere[i].xyz) - pow(sphere[i].w, 2.);
+      float D = pow(B, 2.) - 4. * C;
+
+      if (D < 0.) {
+        continue;
+      }
+
+      float t = (-B + sqrt(D)) / 2.;
+
+      if (t >= 0. && t < foundT) {
+        foundT = t;
+        foundSphere = sphere[i];
+        foundMaterial = material[i];
+        foundFractionIndex = sphereFractionIndex[i];
+      }
+    }
+  }
+
+  vec3 findReflection(vec3 point, vec3 N, vec3 W) {
+    vec3 rW = normalize(2. * dot(N, -W) * N - (-W));
+
+    findSphere(point + .001 * rW, rW);
+
+    point = point + foundT * rW;
+    N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+    reflectRay = -rW;
+
+    return N;
+  }
+
+  vec3 findRefraction(vec3 point, vec3 N, vec3 W) {
+    float fractionIndex = foundFractionIndex;
+    vec3 newW = refract(W, N, fractionIndex);
+
+    findExit(point, newW);
+
+    point = point + foundT * newW;
+    findSphere(point + newW * .01, newW);
+
+    point = point + foundT * newW;
+    N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+    refrectRay = -newW;
+
+    return N;
+  }
+
+  vec3 shadeSphere(vec3 point, vec4 sphere, vec3 material, vec3 W) {
+    vec3 N = normalize((point - sphere.xyz) / sphere.w);
+
+    vec3 ambient = material * ambientVar;
+    vec3 diffuse = material * diffuseVar;
+
+    vec3 color = ambient;
+
+    for (int i = 0; i < numOfLights; i++) {
+      vec3 H = (N + Ldir[i]) * .5; 
+      color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
+
+      // Check reflection
+      vec3 reflectN = findReflection(point, N, W);
+      if (foundT != NOT_FOUND) {
+        vec3 ambient = foundMaterial * ambientVar;
+        vec3 diffuse = foundMaterial * diffuseVar;
+
+        vec3 reflectH = (reflectN + Ldir[i]) * .5; 
+        vec3 reflectColor = Lrgb[i] * (diffuse * max(0., dot(reflectN, reflectRay)) + material * pow(max(0., dot(reflectN, reflectH)), 75.));
+
+        color += reflectColor;
+      }
+
+      // Check refraction
+      vec3 refrectN = findRefraction(point, N, W);
+      if (foundT != NOT_FOUND) {
+        vec3 ambient = foundMaterial * ambientVar;
+        vec3 diffuse = foundMaterial * diffuseVar;
+
+        vec3 refractH = (refrectN + Ldir[i]) * .5; 
+        vec3 refractColor = Lrgb[i] * (diffuse * max(0., dot(refrectN, refrectRay)) + material * pow(max(0., dot(refrectN, refractH)), 75.));
+
+        color += refractColor;
+      }
+    }
+
+    return color;
+  }
+
+  void setCube() {
+    cube[0] = vec4(1., 0., 1., -1.);
+    cube[1] = vec4(-1., 0., 0., -1.);
+    cube[2] = vec4(0., 1., 0., -1.);
+    cube[3] = vec4(0., -1., 0., -1.);
+    cube[4] = vec4(0., 0., 1., -1.);
+    cube[5] = vec4(0., 0., -1., -1.);
+  }
+
+  float computeT(vec4 plain, vec3 V, vec3 W) {
+    return (plain.x * V.x + plain.y * V.y + plain.z * V.z + plain.w) / (plain.x * W.x + plain.y * W.y + plain.z * W.z);
+  }
+
+  void findCube(vec3 V, vec3 W) {
+    enterT = computeT(cube[1], V, W);
+
+    return;
+
+    for (int i = 0; i < 6; i++) {
+      float t = computeT(cube[i], V, W);
+      if (t < 0.) {
+        enterT = max(enterT, t);
+      } else {
+        exitT = min(exitT, t);
+      }
+    }
+  }
+
+  void findCylinder(vec3 V, vec3 W, float oneIn) {
+    foundCylinderT = NOT_FOUND;
+
+    for (int i = 0; i < numOfCylinders; i++) {
+      vec3 P0 = V;
+      vec3 P1;
+      vec3 deltaP;
+      if (cylinder[i].x == -9999.) {
+        // Horizontal
+        P1 = vec3(cylinderGap[i].x, cylinder[i].y, cylinder[i].z) - V;
+        deltaP = vec3(1., 0., 0.);
+      } else if (cylinder[i].y == -9999.) {
+        // Vertical
+        P1 = vec3(cylinder[i].x, cylinderGap[i].x, cylinder[i].z) - V;
+        deltaP = vec3(0., 1., 0.);
+      }
+
+      vec3 X = W - (dot(W, deltaP) / dot(deltaP, deltaP)) * deltaP;
+      vec3 Y = P0 - P1 - ((dot(P0, deltaP) - dot(P1, deltaP)) / dot(deltaP, deltaP)) * deltaP;
+      float A = dot(X, X);
+      float B = 2. * dot(X, Y);
+      float C = dot(Y, Y) - pow(cylinder[i].w, 2.);
+      float D = pow(B, 2.) - 4. * A * C;
+
+      if (D < 0.) {
+        continue;
+      }
+
+      float t;
+      if (oneIn == 1.) {
+        t = (-B - sqrt(D)) / (2. * A);
+      } else {
+        t = (-B + sqrt(D)) / (2. * A);
+      }
+
+      vec3 point = V + t * W;
+
+      if ((cylinder[i].y == -9999. && !(point.y < cylinderGap[i].x || point.y > cylinderGap[i].y || t < 0.))
+          || (cylinder[i].x == -9999. && !(point.x < cylinderGap[i].x || point.x > cylinderGap[i].y || t < 0.))) {
+        if (t < foundCylinderT) {
+          foundCylinderT = t;
+          foundCylinder = cylinder[i];
+          foundCylinderMaterial = cylinderMaterial[i];
+          foundCylinderFractionIndex = CylinderFractionIndex[i];
+          foundCylinderInnerMaterial = cylinderInnerMaterial[i];
+        }
+      }
+    }
+  }
+
+  vec3 findCylinderRefraction(vec3 point, vec3 N, vec3 W) {
+    vec3 newW = refract(W, N, foundCylinderFractionIndex);
+
+    findCylinder(point + newW * .01, newW, 0.); // 0. : out
+
+    findSphere(point + newW * .01, newW);
+
+    // Assume sphere is inside the cylinder, behind is not considered yet...
+
+    point = point + foundT * newW;
+    N = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+    refrectRay = -newW;
+
+    return N;
+  }
+
+  vec3 shadeCylinder(vec3 point, vec3 W) {
+    vec3 N;
+    if (foundCylinder.x == -9999.) {
+      N = normalize(vec3(0., point.y - foundCylinder.y, point.z - foundCylinder.z) / foundCylinder.w);
+    } else {
+      N = normalize(vec3(point.x - foundCylinder.x, 0., point.z - foundCylinder.z) / foundCylinder.w);
+    }
+    
+
+    vec3 ambient = foundCylinderMaterial * ambientVar;
+    vec3 diffuse = foundCylinderMaterial * diffuseVar;
+    vec3 color = ambient;
+
+    for (int i = 0; i < numOfLights; i++) {
+      vec3 H = (N + Ldir[i]) * .5; 
+      color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + foundCylinderMaterial * pow(max(0., dot(N, H)), 75.));
+
+      // Check refraction
+      vec3 newW = refract(W, N, foundCylinderFractionIndex);
+
+      findCylinder(point + newW * .01, newW, 0.); // 0. : out
+
+      findSphere(point + newW * .01, newW);
+
+      if (foundCylinderT > foundT) {
+        float r = foundSphere.w;
+        if (foundCylinder.x == -9999.) {
+          float upY = foundSphere.y + r;
+          float downY = foundSphere.y - r;
+          if (upY > foundCylinder.y + foundCylinder.w || downY < foundCylinder.y - foundCylinder.w) {
+            foundMaterial = COLOR_HANAASAGI;
+          }
+        } else {
+          float rightX = foundSphere.x + r;
+          float leftX = foundSphere.x - r;
+          if (leftX < foundCylinder.x - foundCylinder.w || rightX > foundCylinder.x + foundCylinder.w) {
+            foundMaterial = COLOR_HANAASAGI;
+          }
+        }
+        // Have sphere inside
+        point = point + foundT * newW;
+        vec3 refrectN = normalize((point - foundSphere.xyz) / foundSphere.w);
+
+        refrectRay = -newW;
+
+        ambient = foundMaterial * ambientVar;
+        diffuse = foundMaterial * diffuseVar;
+
+        vec3 refractH = (refrectN + Ldir[i]) * .5; 
+        vec3 refractColor = Lrgb[i] * (diffuse * max(0., dot(refrectN, refrectRay)) + foundMaterial * pow(max(0., dot(refrectN, refractH)), 75.));
+
+        color += refractColor;
+        // color = vec3(1., 1., 1.);
+      } else {
+        point = point + foundCylinderT * newW;
+        N = normalize(vec3(point.x - foundCylinder.x, 0., point.z - foundCylinder.z) / foundCylinder.w);
+
+        vec3 H = (N + Ldir[i]) * .5; 
+        color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + foundCylinderMaterial * pow(max(0., dot(N, H)), 75.));
+      }
+    }
+
+    return color;
+  }
+
+  void main(void) {
+    vec2 c = uCursor.xy;
+
+    // Set the default colors
+    setColors();
+
+    // Set sphere material
+    setMaterial();
+
+    // Set the lights
+    setLights(c);
+
+    // Set V and W
+    vec3 V = vec3(0., 0., 0.);
+    vec3 W = normalize(vec3(vPosition.x, vPosition.y, -2.));
+
+    // Set sphere movements
+    setSphereMovements();
+
+    setCylinder();
+
+    setCube();
+
+    // Set background color
+    vec3 color = vec3(0., 0., 0.);
+
+    findCylinder(V, W, 1.); // 1. : in
+
+    if (foundCylinderT != NOT_FOUND) {
+      color = shadeCylinder(V + foundCylinderT * W, W);
+    } else {
+      findCylinder(V, W, 0.); 
+
+      if (foundCylinderT != NOT_FOUND) {
+        color = foundCylinderInnerMaterial;
+      } 
+
+      // Find if there's any spheres
+      findSphere(V, W);
+
+      if (foundCylinderT == NOT_FOUND && foundT == NOT_FOUND) {
+        gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
+        return;
+      }
+
+      if (foundCylinderT > foundT) {
+        color = shadeSphere(V + foundT * normalize(W), foundSphere, foundMaterial, normalize(W));
+      }
+    }
+
+
+    gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
+  }
+</script>
+
+<script>
+  start_gl('canvas1', document.getElementById('my_vertex_shader'  ).innerHTML,
+      document.getElementById('my_fragment_shader').innerHTML);
+</script>
