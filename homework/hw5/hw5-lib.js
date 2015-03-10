@@ -513,7 +513,7 @@ var drawShape = function (canvas, matrix, icosahedron, callback) {
 };
 
 var drawBoard = function (canvas, g) {
-  g.strokeStyle = 'blue';
+  g.strokeStyle = 'black';
   g.beginPath();
   g.moveTo(0, 0);
   g.lineTo(canvas.width, 0);

@@ -2,6 +2,16 @@
  * Created by youlongli on 3/8/15.
  */
 
+var color = [
+  'rgb(203,  27,  68)',
+  'rgb(250, 214, 137)',
+  'rgb(129, 199, 212)',
+  'rgb(134, 193, 102)',
+  'rgb(139, 129, 195)',
+  'rgb(252, 250, 242)',
+  'rgb( 12,  12,  12)'
+];
+
 /************************Canvas Playground************************/
 var canvasPlayground = initCanvas('playground');
 
@@ -9,7 +19,7 @@ var canvasPlayground = initCanvas('playground');
 var playgroundMatrixAdjustment = getMatrixAdjustmentObj();
 slideUpdate('playground', playgroundMatrixAdjustment);
 
-var num = 50;
+var num = 200;
 var enemies = new Array(num);
 var enemiesDir = new Array(num);
 var enemiesDist = new Array(num);
@@ -63,7 +73,7 @@ canvasPlayground.update = function (g) {
       mousePos.reverse();
     }
 
-    moveShape(enemies[i], mousePos, .05 + 0.01 * Math.floor(i % 10));
+    moveShape(enemies[i], mousePos, .05 + 0.01 * Math.floor(i % 10) + 0.5 * this.cursor.z);
   }
 
   // Initial the matrix
@@ -74,20 +84,23 @@ canvasPlayground.update = function (g) {
   matrix.rotateY(playgroundMatrixAdjustment.rY);
   matrix.rotateZ(playgroundMatrixAdjustment.rZ);
 
-  g.fillStyle = this.cursor.z ? 'red' : 'rgb(255,255,128)';
 
-  //for (var i = 0; i < num; i++) {
-  //  var coord = new Vector3();
-  //  matrix.transform(enemies[i].coord, coord);
-  //  coord.viewportTransformation(this);
-  //  g.beginPath();
-  //  g.moveTo(this.cursor.x, this.cursor.y);
-  //  g.lineTo(coord.x, coord.y);
-  //  g.stroke();
-  //}
+  if (this.cursor.z) {
+    for (var i = 0; i < num; i++) {
+      var coord = new Vector3();
+      matrix.transform(enemies[i].coord, coord);
+      coord.viewportTransformation(this);
+      g.strokeStyle = 'gray';
+      g.beginPath();
+      g.moveTo(this.cursor.x, this.cursor.y);
+      g.lineTo(coord.x, coord.y);
+      g.stroke();
+    }
+  }
 
   for (var i = 0; i < num; i++) {
     drawShape(this, matrix, enemies[i], function (vertex1, vertex2) {
+      g.strokeStyle = color[i % color.length];
       g.beginPath();
       g.moveTo(vertex1.x, vertex1.y);
       g.lineTo(vertex2.x, vertex2.y);
@@ -122,13 +135,15 @@ canvas0.update = function (g) {
   var num = 50;
   var icosahedron = new Array(num);
   for (var i = 0; i < num; i++) {
-    icosahedron[i] = new Icosahedron(new Vector3(Math.cos(time + i), Math.sin(time + i), 0));
+    var speed = this.cursor.z ? 0 : 1;
+    icosahedron[i] = new Icosahedron(new Vector3(Math.cos(time * speed + i), Math.sin(time * speed + i), 0));
   }
 
-  g.fillStyle = this.cursor.z ? 'red' : 'rgb(255,255,128)';
+  g.strokeStyle = this.cursor.z ? color[0] : color[2];
 
   for (var i = 0; i < num; i++) {
     drawShape(this, matrix, icosahedron[i], function (vertexPixel1, vertexPixel2) {
+
       g.beginPath();
       g.moveTo(vertexPixel1.x, vertexPixel1.y);
       g.lineTo(vertexPixel2.x, vertexPixel2.y);
