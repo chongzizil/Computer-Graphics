@@ -5,17 +5,18 @@
   <meta charset="utf-8">
   <!--<meta Content-Type="text/csv"/>-->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="description" content="This website holds the homework of Computer Graphics">
   <meta name="author" content="Youlong Li">
-
   <title>Computer Graphics</title>
-
   <!-- Bootstrap core CSS -->
   <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles -->
   <link href="app.css" rel="stylesheet">
+  <!-- JS Files -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="homework/lib/lib1.js"></script>
 </head>
 <body ng-cloak ng-controller="mainCtrl">
 
@@ -23,22 +24,22 @@
 <h2 id="author">Youlong Li</h2>
 
 <div class="button-panel">
-  <a href="#/Contents" class="btn btn-primary">Contents</a>
-  <a href="#/hw1" class="btn btn-primary">HW1</a>
-  <a href="#/hw2" class="btn btn-primary">HW2</a>
+  <a href="Contents.html" class="btn btn-primary">Contents</a>
+  <a href="homework/hw1/hw1.html" class="btn btn-primary">HW1</a>
+  <a href="homework/hw2/hw2.html" class="btn btn-primary">HW2</a>
 
   <div class="btn-group">
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
       HW3<span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href="#/Matrix">Matrix</a></li>
-      <li><a href="#/Bounce">Bounce</a></li>
+      <li><a href="homework/hw3/Matrix.html">Matrix</a></li>
+      <li><a href="homework/hw3/Bounce.html">Bounce</a></li>
       <li class="divider"></li>
-      <li><a href="#/BlinnModel">Blinn</a></li>
-      <li><a href="#/PhongModel">Phong</a></li>
-      <li><a href="#/Reflection">Reflection</a></li>
-      <li><a href="#/BooleanIntersection">BooleanIntersection</a></li>
+      <li><a href="homework/hw3/BlinnModel.html">Blinn</a></li>
+      <li><a href="homework/hw3/PhongModel.html">Phong</a></li>
+      <li><a href="homework/hw3/Reflection.html">Reflection</a></li>
+      <li><a href="homework/hw3/BooleanIntersection.html">BooleanIntersection</a></li>
     </ul>
   </div>
 
@@ -47,20 +48,18 @@
       HW4<span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href="#/Triangle">Triangle</a></li>
-      <li><a href="#/Hexagon">Hexagon</a></li>
-      <li><a href="#/Cylinder">Cylinder</a></li>
-      <li><a href="#/WoodTexture">WoodTexture</a></li>
-      <li><a href="#/Refraction">Refraction</a></li>
-      <li><a href="#/Cube">Cube</a></li>
+      <li><a href="homework/hw4/Triangle.html">Triangle</a></li>
+      <li><a href="homework/hw4/Hexagon.html">Hexagon</a></li>
+      <li><a href="homework/hw4/Cylinder.html">Cylinder</a></li>
+      <li><a href="homework/hw4/WoodTexture.html">WoodTexture</a></li>
+      <li><a href="homework/hw4/Refraction.html">Refraction</a></li>
+      <li><a href="homework/hw4/Cube.html">Cube</a></li>
       <li class="divider"></li>
-      <li><a href="#/Experiment">Experiment</a></li>
+      <li><a href="homework/hw4/Experiment.html">Experiment</a></li>
     </ul>
   </div>
-</div>
 
-<div class="button-panel">
-  <button class="btn btn-primary" ng-click="reload()">Reload Page (In case everything gets slow...)</button>
+  <a href="homework/hw5/hw5.html" class="btn btn-primary">HW5</a>
 </div>
 
 <hr/>
@@ -69,13 +68,6 @@
   <ng-view></ng-view>
 </div>
 
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
-<!--HW1-->
-<script src="app.js"></script>
-<script src="mainCtrl.js"></script>
-<script src="homework/lib/lib1.js"></script>
+
 </body>
 </html>

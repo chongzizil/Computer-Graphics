@@ -23,3 +23,11 @@ body {
 p {
   font-size: 12px;
 }
+
+.slider-bars {
+  margin: 30px;
+}
+
+.content {
+  vertical-align: top;
+}

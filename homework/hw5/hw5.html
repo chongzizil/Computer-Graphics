@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<html lang="en" ng-app="computerGraphics">
+<head>
+  <meta charset="utf-8">
+  <!--<meta Content-Type="text/csv"/>-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="description"
+        content="This website holds the homework of Computer Graphics">
+  <meta name="author" content="Youlong Li">
+  <title>Computer Graphics</title>
+  <!-- Bootstrap core CSS -->
+  <link href="../../bower_components/bootstrap/dist/css/bootstrap.css"
+        rel="stylesheet">
+  <link href="slider/css/slider.css" rel="stylesheet">
+  <!-- Custom styles -->
+  <link href="../../app.css" rel="stylesheet">
+  <!-- JS Files -->
+  <script src="../../bower_components/jquery/dist/jquery.js"></script>
+  <script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="../lib/lib1.js"></script>
+  <script src="../hw5/hw5-lib.js"></script>
+  <script src="slider/js/bootstrap-slider.js"></script>
+
+</head>
+<body ng-cloak ng-controller="mainCtrl">
+
+<h1 id="title">Computer Graphics</h1>
+
+<h2 id="author">Youlong Li</h2>
+
+<div class="button-panel">
+  <a href="../../Contents.html" class="btn btn-primary">Contents</a>
+  <a href="../hw1/hw1.html" class="btn btn-primary">HW1</a>
+  <a href="../hw2/hw2.html" class="btn btn-primary">HW2</a>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle"
+            data-toggle="dropdown" aria-expanded="false">
+      HW3<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="../hw3/Matrix.html">Matrix</a></li>
+      <li><a href="../hw3/Bounce.html">Bounce</a></li>
+      <li class="divider"></li>
+      <li><a href="../hw3/BlinnModel.html">Blinn</a></li>
+      <li><a href="../hw3/PhongModel.html">Phong</a></li>
+      <li><a href="../hw3/Reflection.html">Reflection</a></li>
+      <li><a href="../hw3/BooleanIntersection.html">BooleanIntersection</a></li>
+    </ul>
+  </div>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle"
+            data-toggle="dropdown" aria-expanded="false">
+      HW4<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="../hw4/Triangle.html">Triangle</a></li>
+      <li><a href="../hw4/Hexagon.html">Hexagon</a></li>
+      <li><a href="../hw4/Cylinder.html">Cylinder</a></li>
+      <li><a href="../hw4/WoodTexture.html">WoodTexture</a></li>
+      <li><a href="../hw4/Refraction.html">Refraction</a></li>
+      <li><a href="../hw4/Cube.html">Cube</a></li>
+      <li class="divider"></li>
+      <li><a href="../hw4/Experiment.html">Experiment</a></li>
+    </ul>
+  </div>
+
+  <a href="hw5.html" class="btn btn-primary">HW5</a>
+</div>
+
+<hr/>
+
+<div id="show-box">
+  <table>
+    <tr>
+      <td>
+        <canvas id=playground width=500 height=500></canvas>
+      </td>
+
+      <td class="content">
+        <div class="slider-bars">
+          <p>
+            <input type="text" id="playground-scale"
+                   class="slider slider-horizontal" value="0.1"
+                   data-slider-min="0.01"
+                   data-slider-max="0.3" data-slider-step=".01"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            scale
+          </p>
+
+          <p>
+            <input type="text" id="playground-translateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate X
+          </p>
+
+          <p>
+            <input type="text" id="playground-translateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Y
+          </p>
+
+          <p>
+            <input type="text" id="playground-translateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Z
+          </p>
+
+          <p>
+            <input type="text" id="playground-rotateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate X
+          </p>
+
+          <p>
+            <input type="text" id="playground-rotateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Y
+          </p>
+
+          <p>
+            <input type="text" id="playground-rotateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Z
+          </p>
+        </div>
+      </td>
+      <!--Playground Slide bars-->
+    </tr>
+    <tr>
+      <td>
+        <canvas id=canvas0 width=500 height=500></canvas>
+      </td>
+      <td class="content">
+        <div class="slider-bars">
+          <p>
+            <input type="text" id="canvas0-scale"
+                   class="slider slider-horizontal"
+                   value="0.1"
+                   data-slider-min="0.01"
+                   data-slider-max="0.3" data-slider-step=".01"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            scale
+          </p>
+
+          <p>
+            <input type="text" id="canvas0-translateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas0-translateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas0-translateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Z
+          </p>
+
+          <p>
+            <input type="text" id="canvas0-rotateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas0-rotateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas0-rotateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Z
+          </p>
+
+          <p>Bunch of icosahedron :)</p>
+        </div>
+      </td>
+      <!--Slide bars-->
+    </tr>
+    <tr>
+      <td>
+        <canvas id=canvas1 width=500 height=500></canvas>
+      </td>
+      <td class="content">
+        <div class="slider-bars">
+          <p>
+            <input type="text" id="canvas1-scale"
+                   class="slider slider-horizontal"
+                   value="0.1"
+                   data-slider-min="0.01"
+                   data-slider-max="0.3" data-slider-step=".01"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            scale
+          </p>
+
+          <p>
+            <input type="text" id="canvas1-translateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas1-translateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas1-translateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Z
+          </p>
+
+          <p>
+            <input type="text" id="canvas1-rotateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas1-rotateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas1-rotateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Z
+          </p>
+
+          <p>Some shapes...</p>
+        </div>
+      </td>
+      <!--Cube Slide bars-->
+    </tr>
+    <tr>
+      <td>
+        <canvas id=canvas2 width=500 height=500></canvas>
+      </td>
+      <td class="content">
+        <div class="slider-bars">
+          <p>
+            <input type="text" id="canvas2-scale"
+                   class="slider slider-horizontal"
+                   value="0.1"
+                   data-slider-min="0.01"
+                   data-slider-max="0.3" data-slider-step=".01"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            scale
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-translateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-translateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-translateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Z
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-rotateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-rotateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-rotateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="360" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Z
+          </p>
+
+          <p>
+            <input type="text" id="canvas2-x1"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="16" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Smooth
+          </p>
+
+          <p>Cube - Cylinder</p>
+        </div>
+      </td>
+      <!--Tetrahedron Slide bars-->
+    </tr>
+  </table>
+</div>
+
+<script src="../hw5/hw5-canvas.js"></script>
+
+</body>
+</html>

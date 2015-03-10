@@ -1,170 +1,241 @@
-<div class="row">
-  <!-----------------------------------------HW1----------------------------------------->
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/hw1">
-        <img src="img/hw1.png">
-      </a>
-      <div class="caption">
-        <h3>HW1</h3>
-        <p>Valentine's Day</p>
-      </div>
-    </div>
-  </div>
-  <!-----------------------------------------HW2----------------------------------------->
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/hw2">
-        <img src="img/hw2.png">
-      </a>
-      <div class="caption">
-        <h3>HW2</h3>
-        <p>Ray tracing</p>
-      </div>
-    </div>
-  </div>
-  <!-----------------------------------------HW3----------------------------------------->
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Matrix">
-        <img src="img/hw3-matrix.png">
-      </a>
-      <div class="caption">
-        <h3>HW3</h3>
-        <p>Matrix</p>
-      </div>
-    </div>
+<!DOCTYPE html>
+<html>
+<html lang="en" ng-app="computerGraphics">
+<head>
+  <meta charset="utf-8">
+  <!--<meta Content-Type="text/csv"/>-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="This website holds the homework of Computer Graphics">
+  <meta name="author" content="Youlong Li">
+  <title>Computer Graphics</title>
+  <!-- Bootstrap core CSS -->
+  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <!-- Custom styles -->
+  <link href="app.css" rel="stylesheet">
+  <!-- JS Files -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="homework/lib/lib1.js"></script>
+</head>
+<body ng-cloak ng-controller="mainCtrl">
+
+<h1 id="title">Computer Graphics</h1>
+<h2 id="author">Youlong Li</h2>
+
+<div class="button-panel">
+  <a href="Contents.html" class="btn btn-primary">Contents</a>
+  <a href="homework/hw1/hw1.html" class="btn btn-primary">HW1</a>
+  <a href="homework/hw2/hw2.html" class="btn btn-primary">HW2</a>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      HW3<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="homework/hw3/Matrix.html">Matrix</a></li>
+      <li><a href="homework/hw3/Bounce.html">Bounce</a></li>
+      <li class="divider"></li>
+      <li><a href="homework/hw3/BlinnModel.html">Blinn</a></li>
+      <li><a href="homework/hw3/PhongModel.html">Phong</a></li>
+      <li><a href="homework/hw3/Reflection.html">Reflection</a></li>
+      <li><a href="homework/hw3/BooleanIntersection.html">BooleanIntersection</a></li>
+    </ul>
   </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Bounce">
-        <img src="img/hw3-bounce.png">
-      </a>
-      <div class="caption">
-        <h3>HW3</h3>
-        <p>Bounce</p>
-      </div>
-    </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      HW4<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="homework/hw4/Triangle.html">Triangle</a></li>
+      <li><a href="homework/hw4/Hexagon.html">Hexagon</a></li>
+      <li><a href="homework/hw4/Cylinder.html">Cylinder</a></li>
+      <li><a href="homework/hw4/WoodTexture.html">WoodTexture</a></li>
+      <li><a href="homework/hw4/Refraction.html">Refraction</a></li>
+      <li><a href="homework/hw4/Cube.html">Cube</a></li>
+      <li class="divider"></li>
+      <li><a href="homework/hw4/Experiment.html">Experiment</a></li>
+    </ul>
   </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/BlinnModel">
-        <img src="img/hw3-blinn.png">
-      </a>
-      <div class="caption">
-        <h3>HW3</h3>
-        <p>Blinn</p>
-      </div>
-    </div>
-  </div>
+  <a href="homework/hw5/hw5.html" class="btn btn-primary">HW5</a>
+</div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/PhongModel">
-        <img src="img/hw3-phong.png">
-      </a>
-      <div class="caption">
-        <h3>HW3</h3>
-        <p>Phong</p>
-      </div>
-    </div>
-  </div>
+<hr/>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Reflection">
-        <img src="img/hw3-reflection.png">
-      </a>
-      <div class="caption">
-        <h3>HW3</h3>
-        <p>Reflection</p>
+<div id="show-box">
+  <div class="row">
+    <!-----------------------------------------HW1----------------------------------------->
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/hw1">
+          <img src="img/hw1.png">
+        </a>
+        <div class="caption">
+          <h3>HW1</h3>
+          <p>Valentine's Day</p>
+        </div>
       </div>
     </div>
-  </div>
+    <!-----------------------------------------HW2----------------------------------------->
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/hw2">
+          <img src="img/hw2.png">
+        </a>
+        <div class="caption">
+          <h3>HW2</h3>
+          <p>Ray tracing</p>
+        </div>
+      </div>
+    </div>
+    <!-----------------------------------------HW3----------------------------------------->
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Matrix">
+          <img src="img/hw3-matrix.png">
+        </a>
+        <div class="caption">
+          <h3>HW3</h3>
+          <p>Matrix</p>
+        </div>
+      </div>
+    </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/BooleanIntersection">
-        <img src="img/hw3-boolean-intersection.png">
-      </a>
-      <div class="caption">
-        <h3>HW3</h3>
-        <p>Boolean Intersection</p>
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Bounce">
+          <img src="img/hw3-bounce.png">
+        </a>
+        <div class="caption">
+          <h3>HW3</h3>
+          <p>Bounce</p>
+        </div>
       </div>
     </div>
-  </div>
-  <!-----------------------------------------HW4----------------------------------------->
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Triangle">
-        <img src="img/hw4-triangle.png">
-      </a>
-      <div class="caption">
-        <h3>HW4</h3>
-        <p>Triangle</p>
-      </div>
-    </div>
-  </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Hexagon">
-        <img src="img/hw4-hexagon.png">
-      </a>
-      <div class="caption">
-        <h3>HW4</h3>
-        <p>Hexagon</p>
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/BlinnModel">
+          <img src="img/hw3-blinn.png">
+        </a>
+        <div class="caption">
+          <h3>HW3</h3>
+          <p>Blinn</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Cube">
-        <img src="img/hw4-cube.png">
-      </a>
-      <div class="caption">
-        <h3>HW4</h3>
-        <p>Cube</p>
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/PhongModel">
+          <img src="img/hw3-phong.png">
+        </a>
+        <div class="caption">
+          <h3>HW3</h3>
+          <p>Phong</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Cylinder">
-        <img src="img/hw4-cylinder.png">
-      </a>
-      <div class="caption">
-        <h3>HW4</h3>
-        <p>Cylinder</p>
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Reflection">
+          <img src="img/hw3-reflection.png">
+        </a>
+        <div class="caption">
+          <h3>HW3</h3>
+          <p>Reflection</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/Refraction">
-        <img src="img/hw4-refraction.png">
-      </a>
-      <div class="caption">
-        <h3>HW4</h3>
-        <p>Refraction</p>
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/BooleanIntersection">
+          <img src="img/hw3-boolean-intersection.png">
+        </a>
+        <div class="caption">
+          <h3>HW3</h3>
+          <p>Boolean Intersection</p>
+        </div>
       </div>
     </div>
-  </div>
+    <!-----------------------------------------HW4----------------------------------------->
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Triangle">
+          <img src="img/hw4-triangle.png">
+        </a>
+        <div class="caption">
+          <h3>HW4</h3>
+          <p>Triangle</p>
+        </div>
+      </div>
+    </div>
 
-  <div class="col-sm-3 col-md-2">
-    <div class="thumbnail">
-      <a href="#/WoodTexture">
-        <img src="img/hw4-wood-texture.png">
-      </a>
-      <div class="caption">
-        <h3>HW4</h3>
-        <p>WoodTexture</p>
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Hexagon">
+          <img src="img/hw4-hexagon.png">
+        </a>
+        <div class="caption">
+          <h3>HW4</h3>
+          <p>Hexagon</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Cube">
+          <img src="img/hw4-cube.png">
+        </a>
+        <div class="caption">
+          <h3>HW4</h3>
+          <p>Cube</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Cylinder">
+          <img src="img/hw4-cylinder.png">
+        </a>
+        <div class="caption">
+          <h3>HW4</h3>
+          <p>Cylinder</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/Refraction">
+          <img src="img/hw4-refraction.png">
+        </a>
+        <div class="caption">
+          <h3>HW4</h3>
+          <p>Refraction</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+      <div class="thumbnail">
+        <a href="#/WoodTexture">
+          <img src="img/hw4-wood-texture.png">
+        </a>
+        <div class="caption">
+          <h3>HW4</h3>
+          <p>WoodTexture</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+</body>
+</html>

@@ -1,10 +1,77 @@
-<h1>Refraction</h1>
+<!DOCTYPE html>
+<html>
+<html lang="en" ng-app="computerGraphics">
+<head>
+  <meta charset="utf-8">
+  <!--<meta Content-Type="text/csv"/>-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="This website holds the homework of Computer Graphics">
+  <meta name="author" content="Youlong Li">
+  <title>Computer Graphics</title>
+  <!-- Bootstrap core CSS -->
+  <link href="../../bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <!-- Custom styles -->
+  <link href="../../app.css" rel="stylesheet">
+  <!-- JS Files -->
+  <script src="../../bower_components/jquery/dist/jquery.js"></script>
+  <script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="../lib/lib1.js"></script>
+</head>
+<body ng-cloak ng-controller="mainCtrl">
 
-<body bgcolor=black>
-<td><canvas id='canvas1' width=600 height=600></canvas></td>
-</body>
+<h1 id="title">Computer Graphics</h1>
+<h2 id="author">Youlong Li</h2>
 
-<script id='my_vertex_shader' type='x-shader/x-vertex'>
+<div class="button-panel">
+  <a href="../../Contents.html" class="btn btn-primary">Contents</a>
+  <a href="../hw1/hw1.html" class="btn btn-primary">HW1</a>
+  <a href="../hw2/hw2.html" class="btn btn-primary">HW2</a>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      HW3<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="../hw3/Matrix.html">Matrix</a></li>
+      <li><a href="../hw3/Bounce.html">Bounce</a></li>
+      <li class="divider"></li>
+      <li><a href="../hw3/BlinnModel.html">Blinn</a></li>
+      <li><a href="../hw3/PhongModel.html">Phong</a></li>
+      <li><a href="../hw3/Reflection.html">Reflection</a></li>
+      <li><a href="../hw3/BooleanIntersection.html">BooleanIntersection</a></li>
+    </ul>
+  </div>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      HW4<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="../hw4/Triangle.html">Triangle</a></li>
+      <li><a href="../hw4/Hexagon.html">Hexagon</a></li>
+      <li><a href="../hw4/Cylinder.html">Cylinder</a></li>
+      <li><a href="../hw4/WoodTexture.html">WoodTexture</a></li>
+      <li><a href="../hw4/Refraction.html">Refraction</a></li>
+      <li><a href="../hw4/Cube.html">Cube</a></li>
+      <li class="divider"></li>
+      <li><a href="../hw4/Experiment.html">Experiment</a></li>
+    </ul>
+  </div>
+
+  <a href="../hw5/hw5.html" class="btn btn-primary">HW5</a>
+</div>
+
+<hr/>
+
+<div id="show-box">
+  <h1>Refraction</h1>
+
+  <body bgcolor=black>
+  <td><canvas id='canvas1' width=600 height=600></canvas></td>
+  </body>
+
+  <script id='my_vertex_shader' type='x-shader/x-vertex'>
    attribute vec3 aPosition;
    varying   vec3 vPosition;
    void main() {
@@ -13,7 +80,7 @@
    }
 </script>
 
-<script id='my_fragment_shader' type='x-shader/x-fragment'>
+  <script id='my_fragment_shader' type='x-shader/x-fragment'>
   precision mediump float;
   uniform float uTime;
   uniform vec3  uCursor;
@@ -132,8 +199,8 @@
     cylinder[0] = vec4(0., 0., -5., .4);
     cylinder[1] = vec4(0., 0., -5., .4);
     cylinder[2] = vec4(0., 0., -5., .4);
-    cylinderGap[0] = vec2(-2., -1.); 
-    cylinderGap[1] = vec2(-.5, .5); 
+    cylinderGap[0] = vec2(-2., -1.);
+    cylinderGap[1] = vec2(-.5, .5);
     cylinderGap[2] = vec2(1., 2.);
     cylinderMaterial[0] = COLOR_KURENAI;
     cylinderMaterial[1] = COLOR_USUKI;
@@ -234,7 +301,7 @@
     vec3 color = ambient;
 
     for (int i = 0; i < numOfLights; i++) {
-      vec3 H = (N + Ldir[i]) * .5; 
+      vec3 H = (N + Ldir[i]) * .5;
       color += Lrgb[i] * (diffuse * max(0., dot(N, Ldir[i])) + material * pow(max(0., dot(N, H)), 75.));
 
       // Check reflection
@@ -243,7 +310,7 @@
         vec3 ambient = foundMaterial * ambientVar;
         vec3 diffuse = foundMaterial * diffuseVar;
 
-        vec3 reflectH = (reflectN + Ldir[i]) * .5; 
+        vec3 reflectH = (reflectN + Ldir[i]) * .5;
         vec3 reflectColor = Lrgb[i] * (diffuse * max(0., dot(reflectN, reflectRay)) + material * pow(max(0., dot(reflectN, reflectH)), 75.));
 
         color += reflectColor;
@@ -255,7 +322,7 @@
         vec3 ambient = foundMaterial * ambientVar;
         vec3 diffuse = foundMaterial * diffuseVar;
 
-        vec3 refractH = (refrectN + Ldir[i]) * .5; 
+        vec3 refractH = (refrectN + Ldir[i]) * .5;
         vec3 refractColor = Lrgb[i] * (diffuse * max(0., dot(refrectN, refrectRay)) + material * pow(max(0., dot(refrectN, refractH)), 75.));
 
         color += refractColor;
@@ -342,7 +409,7 @@
     if (enterT == 1.) {
       W = normalize(W);
       float t = findCubeFace(V, W);
-      
+
       vec3 point = V + t * W;
       vec3 N = vec3(0., 0., 1.);
 
@@ -352,7 +419,7 @@
 
       color = ambient;
 
-      vec3 H = (N + Ldir[0]) * .5; 
+      vec3 H = (N + Ldir[0]) * .5;
       color += Lrgb[0] * (diffuse * max(0., dot(N, Ldir[0])) + material * pow(max(0., dot(N, H)), 200.));
 
 
@@ -370,7 +437,7 @@
         vec3 ambient = foundMaterial * ambientVar;
         vec3 diffuse = foundMaterial * diffuseVar;
 
-        vec3 refractH = (refrectN + Ldir[0]) * .5; 
+        vec3 refractH = (refrectN + Ldir[0]) * .5;
         vec3 refractColor = Lrgb[0] * (diffuse * max(0., dot(refrectN, refrectRay)) + material * pow(max(0., dot(refrectN, refractH)), 75.));
 
       color = refractColor;
@@ -392,8 +459,12 @@
     gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
   }
 </script>
+</div>
 
 <script>
-  start_gl('canvas1', document.getElementById('my_vertex_shader'  ).innerHTML,
+  start_gl('canvas1', document.getElementById('my_vertex_shader').innerHTML,
       document.getElementById('my_fragment_shader').innerHTML);
 </script>
+
+</body>
+</html>
