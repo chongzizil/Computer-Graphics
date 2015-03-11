@@ -19,14 +19,14 @@ var canvasPlayground = initCanvas('playground');
 var playgroundMatrixAdjustment = getMatrixAdjustmentObj();
 slideUpdate('playground', playgroundMatrixAdjustment);
 
-var num = 200;
+var num = 100;
 var enemies = new Array(num);
 var enemiesDir = new Array(num);
 var enemiesDist = new Array(num);
 for (var i = 0; i < num; i++) {
   enemiesDir[i] = true;
   enemiesDist[i] = [Math.floor(Math.random() * 3) + 1, Math.floor(Math.random() * 3) + 8];
-  var choice = Math.floor(Math.random() * 6);
+  var choice = Math.floor(Math.random() * 7);
   var x = (Math.random() * 2 - 1) * 10;
   var y = (Math.random() * 2 - 1) * 10;
   var z = (Math.random() * 2 - 1) * 10;
@@ -41,13 +41,16 @@ for (var i = 0; i < num; i++) {
       enemies[i] = new Icosahedron(new Vector3(x, y, z), new Vector3(.4, .4, .4));
       break;
     case 3:
-      enemies[i] = new Cylinder(new Vector3(x, y, z), Math.floor(3) + 1, new Vector3(.4, .4, .4));
+      enemies[i] = new Cylinder(new Vector3(x, y, z), 5, new Vector3(.4, .4, .4));
       break;
     case 4:
       enemies[i] = new Prism(new Vector3(x, y, z), new Vector3(.4, .4, .4));
       break;
     case 5:
       enemies[i] = new Octahedron(new Vector3(x, y, z), new Vector3(.4, .4, .4));
+      break;
+    default :
+      enemies[i] = new Shpere(new Vector3(x, y, z), 2, new Vector3(.4, .4, .4));
       break;
   }
 }
@@ -215,6 +218,38 @@ canvas2.update = function (g) {
   g.fillStyle = this.cursor.z ? 'red' : 'rgb(255,255,128)';
 
   drawShape(this, matrix, cylinder, function (vertexPixel1, vertexPixel2) {
+    g.beginPath();
+    g.moveTo(vertexPixel1.x, vertexPixel1.y);
+    g.lineTo(vertexPixel2.x, vertexPixel2.y);
+    g.stroke();
+  });
+
+  drawBoard(this, g);
+};
+
+/************************Canvas3************************/
+var canvas3 = initCanvas('canvas3');
+
+// For slide bar
+var canvas3Adjustment = getMatrixAdjustmentObj();
+slideUpdate('canvas3', canvas3Adjustment);
+
+canvas3.update = function (g) {
+  var x = this.cursor.x, y = this.cursor.y;
+
+  var matrix = new Matrix();
+  matrix.scale(canvas3Adjustment.scale, canvas3Adjustment.scale, canvas3Adjustment.scale);
+  matrix.translate(canvas3Adjustment.translateX, canvas3Adjustment.translateY, canvas3Adjustment.translateZ);
+  matrix.rotateX(canvas3Adjustment.rX);
+  matrix.rotateY(canvas3Adjustment.rY);
+  matrix.rotateZ(canvas3Adjustment.rZ);
+
+  var sphere = new Shpere(new Vector3(0, 0, 0), canvas3Adjustment.x1);
+  //var sphere = new Shpere(new Vector3(0, 0, 0), canvas3Adjustment.x1);
+
+  g.fillStyle = this.cursor.z ? 'red' : 'rgb(255,255,128)';
+
+  drawShape(this, matrix, sphere, function (vertexPixel1, vertexPixel2) {
     g.beginPath();
     g.moveTo(vertexPixel1.x, vertexPixel1.y);
     g.lineTo(vertexPixel2.x, vertexPixel2.y);

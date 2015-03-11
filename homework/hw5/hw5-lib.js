@@ -484,6 +484,88 @@ Cylinder.prototype = {
   }
 };
 
+/************************Shpere************************/
+function Shpere(coord, round, scale) { // vertices = 2 * 4 * round...
+  this.round = 0;
+  this.vertices = new Array();
+  this.edges = new Array();
+  this.coord = new Vector3(0, 0, 0);
+  this.scale = new Vector3(1, 1, 1);
+  this.set(coord, round, scale);
+}
+// r = 1
+Shpere.prototype = {
+  set: function (coord, round, scale) {
+    if (coord !== undefined) {
+      this.coord = coord;
+    }
+
+    if (round != undefined) {
+      this.round = round;
+    }
+
+    if (scale !== undefined) {
+      this.scale = scale;
+    }
+
+    var level = 3 + this.round * 2;
+    var index = 0;
+    var levels = new Array(level);
+    var num = 4 * (this.round + 1);
+
+    for (var i = 0; i < level; i++) {
+      if (i === 0) { // First level, bottom
+        levels[i] = new Array(1);
+        this.vertices[index] = new Vector3(0, 0, -1);
+        levels[i][0] = index++;
+      } else if (i === level - 1) { // Last level, top
+        levels[i] = new Array(1);
+        this.vertices[index] = new Vector3(0, 0, 1);
+        levels[i][0] = index++;
+      } else {
+        levels[i] = new Array(num);
+        var diff = i - Math.floor(level / 2);
+        var dist = diff * (2 / (level - 1)); // distance of the layer from the core
+
+        var theta = 360 / num;
+        for (var j = 0; j < num; j++) { // x = sqrt(r - dst)
+          var length = Math.sqrt(Math.pow(1, 2) - Math.pow(dist, 2));
+          this.vertices[index] =
+              new Vector3(Math.cos(j * theta * Math.PI / 180) * length, Math.sin(j * theta * Math.PI / 180) * length, dist);
+          levels[i][j] = index++;
+        }
+      }
+    }
+
+    // Vertical edges
+    for (var i = 0; i < levels[1].length; i++) {
+      this.edges.push([0, levels[1][i]]);
+    }
+    for (var i = 1; i < level - 2; i++) {
+      for (var j = 0; j < levels[1].length; j++) {
+        this.edges.push([levels[i][j], levels[i + 1][j]]);
+      }
+    }
+    for (var i = 0; i < levels[1].length; i++) {
+      this.edges.push([levels[level - 1][0], levels[level - 2][i]]);
+    }
+    // Horizontal edges
+    for (var i = 1; i < level - 2; i++) {
+      for (var j = 0; j < levels[1].length; j++) {
+        if (j === levels[1].length - 1) {
+          this.edges.push([levels[i][j], levels[i][0]]);
+        } else {
+          this.edges.push([levels[i][j], levels[i][j + 1]]);
+        }
+      }
+    }
+
+    for (var index in this.vertices) {
+      this.vertices[index].mul(this.scale);
+      this.vertices[index].add(this.coord)
+    }
+  }
+};
 
 /*****************************************************/
 /************************Other************************/
@@ -525,7 +607,7 @@ var drawBoard = function (canvas, g) {
 
 var getMatrixAdjustmentObj = function () {
   return {
-    scale: .15,
+    scale: .16,
     translateX: 0,
     translateY: 0,
     translateZ: 0,

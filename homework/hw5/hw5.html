@@ -131,7 +131,7 @@
             <input type="text" id="playground-rotateX"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -142,7 +142,7 @@
             <input type="text" id="playground-rotateY"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -153,7 +153,7 @@
             <input type="text" id="playground-rotateZ"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -223,7 +223,7 @@
             <input type="text" id="canvas0-rotateX"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -234,7 +234,7 @@
             <input type="text" id="canvas0-rotateY"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -245,7 +245,7 @@
             <input type="text" id="canvas0-rotateZ"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -312,7 +312,7 @@
             <input type="text" id="canvas1-rotateX"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -323,7 +323,7 @@
             <input type="text" id="canvas1-rotateY"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -334,7 +334,7 @@
             <input type="text" id="canvas1-rotateZ"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -401,7 +401,7 @@
             <input type="text" id="canvas2-rotateX"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -412,7 +412,7 @@
             <input type="text" id="canvas2-rotateY"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -423,7 +423,7 @@
             <input type="text" id="canvas2-rotateZ"
                    class="slider slider-horizontal" value="0"
                    data-slider-min="0"
-                   data-slider-max="360" data-slider-step="1"
+                   data-slider-max="180" data-slider-step="1"
                    data-slider-value="0"
                    data-slider-selection="after"
                    data-slider-tooltip="hide">
@@ -444,8 +444,106 @@
           <p>Cube - Cylinder</p>
         </div>
       </td>
-      <!--Tetrahedron Slide bars-->
-    </tr>
+    </tr><!--Cylinder Slide bars-->
+    <tr>
+      <td>
+        <canvas id=canvas3 width=500 height=500></canvas>
+      </td>
+      <td class="content">
+        <div class="slider-bars">
+          <p>
+            <input type="text" id="canvas3-scale"
+                   class="slider slider-horizontal"
+                   value="0.16"
+                   data-slider-min="0"
+                   data-slider-max="0.5" data-slider-step=".01"
+                   data-slider-value="0.16"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            scale
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-translateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-translateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-translateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="1" data-slider-step=".1"
+                   data-slider-value="0.1"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            translate Z
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-rotateX"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="180" data-slider-step="1"
+                   data-slider-value="30"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate X
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-rotateY"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="180" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Y
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-rotateZ"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="180" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Rotate Z
+          </p>
+
+          <p>
+            <input type="text" id="canvas3-x1"
+                   class="slider slider-horizontal" value="0"
+                   data-slider-min="0"
+                   data-slider-max="18" data-slider-step="1"
+                   data-slider-value="0"
+                   data-slider-selection="after"
+                   data-slider-tooltip="hide">
+            Smooth
+          </p>
+
+          <p>Sphere</p>
+        </div>
+      </td>
+    </tr><!--Shpere Slide bars-->
   </table>
 </div>
 
