@@ -21,7 +21,7 @@ Vector3.prototype = {
     this.y += that.y;
     this.z += that.z;
   },
-  subtract: function(that) {
+  subtract: function(that){
     this.x -= that.x;
     this.y -= that.y;
     this.z -= that.z;
@@ -30,6 +30,14 @@ Vector3.prototype = {
     this.x *= that.x;
     this.y *= that.y;
     this.z *= that.z;
+  },
+  equals: function(that) {
+    return Math.abs(this.x - that.x) < 0.001
+        && Math.abs(this.y - that.y) < 0.001
+        && Math.abs(this.z - that.z) < 0.001;
+  },
+  clone: function () {
+    return new Vector3(this.x, this.y, this.z);
   },
   reverse: function () {
     this.x = -this.x;
@@ -572,7 +580,6 @@ Shpere.prototype = {
 /*****************************************************/
 
 var moveShape = function (shape, dir, speed) {
-  normalize(dir);
   var move = new Vector3(dir.x * speed * shape.scale.x, dir.y * speed * shape.scale.y, 0);
 
   for (var index in shape.vertices) {
