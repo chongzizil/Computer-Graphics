@@ -12,7 +12,6 @@ $(function () {
     'rgb( 12,  12,  12)'
   ];
 
-  var done = false;
 // Enable the selector
   $('.selectpicker').selectpicker();
   $('.selectpicker').selectpicker('val', 'Shpere'); // Default shape
@@ -79,11 +78,8 @@ $(function () {
     matrix.rotateY(MatrixAdjustment.rotateY);
     matrix.rotateZ(MatrixAdjustment.rotateZ);
     matrix.perspective(MatrixAdjustment.perspectiveX, MatrixAdjustment.perspectiveY, MatrixAdjustment.perspectiveZ);
-    if (!done) {
-      console.log(matrix);
-      done = true;
-    }
-    matrix.perspective2(MatrixAdjustment.f);
+
+    //matrix.perspective2(MatrixAdjustment.f);
 
     parametric.render(this, matrix, g);
 
