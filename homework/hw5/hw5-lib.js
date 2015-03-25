@@ -92,11 +92,11 @@ function Matrix() {
   this.col = 4;
   this.scaleEnv = new Vector3(1, 1, 1);
   this.matrix = new Array(this.row);
-  this.initialMatrix = new Array(this.row);
+  this.identityMatrix = new Array(this.row);
 
   for (var i = 0; i < this.row; i++) {
     this.matrix[i] = new Array(this.col);
-    this.initialMatrix[i] = new Array(this.col);
+    this.identity[i] = new Array(this.col);
   }
 
   this.set();
@@ -104,7 +104,7 @@ function Matrix() {
 
 Matrix.prototype = {
   set: function (initialMatrixArray) {
-    this.initialMatrix = [
+    this.identityMatrix = [
       [1, 0, 0, 0],
       [0, 1, 0, 0],
       [0, 0, 1, 0],
@@ -113,14 +113,14 @@ Matrix.prototype = {
 
     for (var i = 0; i < this.row; i++) {
       for (var j = 0; j < this.col; j++) {
-        this.matrix[i][j] = this.initialMatrix[i][j];
+        this.matrix[i][j] = this.identityMatrix[i][j];
       }
     }
 
     this.identity();
   },
   identity: function () {
-    this.initialMatrix = [
+    this.identityMatrix = [
       [1, 0, 0, 0],
       [0, 1, 0, 0],
       [0, 0, 1, 0],
@@ -130,13 +130,13 @@ Matrix.prototype = {
     for (var i = 0; i < this.row; i++) {
       for (var j = 0; j < this.col; j++) {
         if (i == 0 && j == 3) {
-          this.matrix[i][j] = this.initialMatrix[i][j] * this.scaleEnv.x;
+          this.matrix[i][j] = this.identityMatrix[i][j] * this.scaleEnv.x;
         } else if (i == 1 && j == 3) {
-          this.matrix[i][j] = this.initialMatrix[i][j] * this.scaleEnv.y;
+          this.matrix[i][j] = this.identityMatrix[i][j] * this.scaleEnv.y;
         } else if (i == 2 && j == 3) {
-          this.matrix[i][j] = this.initialMatrix[i][j] * this.scaleEnv.z;
+          this.matrix[i][j] = this.identityMatrix[i][j] * this.scaleEnv.z;
         } else {
-          this.matrix[i][j] = this.initialMatrix[i][j];
+          this.matrix[i][j] = this.identityMatrix[i][j];
         }
       }
     }
