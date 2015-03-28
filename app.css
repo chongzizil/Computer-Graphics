@@ -41,3 +41,24 @@ canvas#playground {
   margin-bottom: 10px;
   display: block;
 }
+
+#instructions {
+  text-align: left;
+}
+
+.canvas-container {
+  width: 800px;
+  height: 450px;
+
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.title {
+  text-align: center;
+}
