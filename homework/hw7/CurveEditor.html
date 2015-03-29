@@ -1,0 +1,95 @@
+<div>
+  <div id="canvas-container">
+    <h1 class="title">Curve-Editor (Bezier)</h1>
+
+    <div class="instructions">
+      <p><b>Add point:</b> click mouse in an empty space.</p>
+
+      <p><b>Delete latest added point:</b> Press "X" key</p>
+
+      <p><b>Delete selected point:</b> Press "D" key while the cursor is
+        pointing
+        to
+        the point needed to be deleted.</p>
+
+      <P><b>Move a point:</b> press the mouse while the cursor is pointing to
+        the
+        point and simply move the cursor. </P>
+    </div>
+
+    <div>
+      <!--Buttons for input and output-->
+      <button type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#inputModal">
+        Input Coordinates
+      </button>
+      <button id="outputButton" type="button" class="btn btn-primary">
+        Output Coordinates
+      </button>
+      <button id="clearButton" type="button" class="btn btn-primary">
+        Clear Canvas
+      </button>
+    </div>
+
+    <canvas id=playground width=800 height=450></canvas>
+    <div>
+      <label>Points: <input type="checkbox" name="drawDot" checked></label>
+      <label>Auxiliary Lines: <input type="checkbox" name="drawAuxiliary" checked></label>
+      <label for="curveList"> Curve List:
+        <select id="curveList" class="selectpicker">
+          <option value="0" style="background: rgb(0,  0,  0); color: white;">Curve 0</option>
+          <option value="1" style="background: rgb(203,  27,  68)">Curve 1</option>
+          <option value="2" style="background: rgb(250, 214, 137)">Curve 2</option>
+          <option value="3" style="background: rgb(129, 199, 212)">Curve 3</option>
+          <option value="4" style="background: rgb(134, 193, 102)">Curve 4</option>
+          <option value="5" style="background: rgb(139, 129, 195)">Curve 5</option>
+          <option value="6" style="background: rgb(45, 75, 122); color: white;">Curve 6</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <!-- Input Modal -->
+  <div class="modal fade" id="inputModal" tabindex="-1" role="dialog"
+       aria-labelledby="outputModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close"><span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="inputModalLabel">Input Coordinates</h4>
+        </div>
+        <div class="modal-body" id="inputModalContent">
+          <div class="form-group">
+            <label for="coordinates">Please enter the coordinates:</label>
+
+            <p>Example: {"x":-1,"y":0,"z":0}, {"x":0,"y":1,"z":0},
+              {"x":1,"y":0,"z":0}</p>
+            <textarea class="form-control" rows="5" id="coordinates"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+          <button id="clearInput" type="button" class="btn btn-default">
+            Clear
+          </button>
+          <button id="submitCoordinates" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="homework/lib/Noise.js"></script>
+  <script src="homework/hw7/lib/Bezier.js"></script>
+  <script src="homework/hw7/lib/Hermite.js"></script>
+  <script src="homework/hw7/lib/lib.js"></script>
+  <script src="homework/hw7/lib/Matrix.js"></script>
+  <script src="homework/hw7/lib/Vector3.js"></script>
+  <script src="homework/hw7/lib/Parametric.js"></script>
+  <script src="homework/hw7/CurveEditor.js"></script>
+</div>

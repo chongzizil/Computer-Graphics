@@ -258,3 +258,489 @@ canvas3.update = function (g) {
 
   drawBoard(this, g);
 };
+
+/************************Sliders For Canvas Playground************************/
+$('#playground-scale').noUiSlider({
+  start: [0.1],
+  step: 0.01,
+  range: {
+    'min': [0.1],
+    'max': [0.3]
+  }
+});
+
+$('#playground-scale').on('slide', function () {
+  playgroundMatrixAdjustment.scale = parseFloat($("#playground-scale").val());
+});
+
+$('#playground-translateX').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#playground-translateX').on('slide', function () {
+  playgroundMatrixAdjustment.translateX = parseFloat($("#playground-translateX").val());
+});
+
+$('#playground-translateY').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#playground-translateY').on('slide', function () {
+  playgroundMatrixAdjustment.translateY = parseFloat($("#playground-translateY").val());
+});
+
+$('#playground-translateZ').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#playground-translateZ').on('slide', function () {
+  playgroundMatrixAdjustment.translateZ = parseFloat($("#playground-translateZ").val());
+});
+
+$('#playground-rotateX').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#playground-rotateX').on('slide', function () {
+  playgroundMatrixAdjustment.rX = parseFloat($("#playground-rotateX").val());
+});
+
+$('#playground-rotateY').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#playground-rotateY').on('slide', function () {
+  playgroundMatrixAdjustment.rY = parseFloat($("#playground-rotateY").val());
+});
+
+$('#playground-rotateZ').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#playground-rotateZ').on('slide', function () {
+  playgroundMatrixAdjustment.rZ = parseFloat($("#playground-rotateZ").val());
+});
+
+/************************Sliders For Canvas0************************/
+$('#canvas0-scale').noUiSlider({
+  start: [0.1],
+  step: 0.01,
+  range: {
+    'min': [0.1],
+    'max': [0.3]
+  }
+});
+
+$('#canvas0-scale').on('slide', function () {
+  canvas0Adjustment.scale = parseFloat($("#canvas0-scale").val());
+});
+
+$('#canvas0-translateX').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas0-translateX').on('slide', function () {
+  canvas0Adjustment.translateX = parseFloat($("#canvas0-translateX").val());
+});
+
+$('#canvas0-translateY').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas0-translateY').on('slide', function () {
+  canvas0Adjustment.translateY = parseFloat($("#canvas0-translateY").val());
+});
+
+$('#canvas0-translateZ').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas0-translateZ').on('slide', function () {
+  canvas0Adjustment.translateZ = parseFloat($("#canvas0-translateZ").val());
+});
+
+$('#canvas0-rotateX').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas0-rotateX').on('slide', function () {
+  canvas0Adjustment.rX = parseFloat($("#canvas0-rotateX").val());
+});
+
+$('#canvas0-rotateY').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas0-rotateY').on('slide', function () {
+  canvas0Adjustment.rY = parseFloat($("#canvas0-rotateY").val());
+});
+
+$('#canvas0-rotateZ').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas0-rotateZ').on('slide', function () {
+  canvas0Adjustment.rZ = parseFloat($("#canvas0-rotateZ").val());
+});
+
+/************************Sliders For Canvas1************************/
+$('#canvas1-scale').noUiSlider({
+  start: [0.1],
+  step: 0.01,
+  range: {
+    'min': [0.1],
+    'max': [0.3]
+  }
+});
+
+$('#canvas1-scale').on('slide', function () {
+  canvas1Adjustment.scale = parseFloat($("#canvas1-scale").val());
+});
+
+$('#canvas1-translateX').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas1-translateX').on('slide', function () {
+  canvas1Adjustment.translateX = parseFloat($("#canvas1-translateX").val());
+});
+
+$('#canvas1-translateY').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas1-translateY').on('slide', function () {
+  canvas1Adjustment.translateY = parseFloat($("#canvas1-translateY").val());
+});
+
+$('#canvas1-translateZ').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas1-translateZ').on('slide', function () {
+  canvas1Adjustment.translateZ = parseFloat($("#canvas1-translateZ").val());
+});
+
+$('#canvas1-rotateX').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas1-rotateX').on('slide', function () {
+  canvas1Adjustment.rX = parseFloat($("#canvas1-rotateX").val());
+});
+
+$('#canvas1-rotateY').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas1-rotateY').on('slide', function () {
+  canvas1Adjustment.rY = parseFloat($("#canvas1-rotateY").val());
+});
+
+$('#canvas1-rotateZ').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas1-rotateZ').on('slide', function () {
+  canvas1Adjustment.rZ = parseFloat($("#canvas1-rotateZ").val());
+});
+
+/************************Sliders For Canvas0************************/
+$('#canvas2-scale').noUiSlider({
+  start: [0.1],
+  step: 0.01,
+  range: {
+    'min': [0.1],
+    'max': [0.3]
+  }
+});
+
+$('#canvas2-scale').on('slide', function () {
+  canvas2Adjustment.scale = parseFloat($("#canvas2-scale").val());
+});
+
+$('#canvas2-translateX').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas2-translateX').on('slide', function () {
+  canvas2Adjustment.translateX = parseFloat($("#canvas2-translateX").val());
+});
+
+$('#canvas2-translateY').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas2-translateY').on('slide', function () {
+  canvas2Adjustment.translateY = parseFloat($("#canvas2-translateY").val());
+});
+
+$('#canvas2-translateZ').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas2-translateZ').on('slide', function () {
+  canvas2Adjustment.translateZ = parseFloat($("#canvas2-translateZ").val());
+});
+
+$('#canvas2-rotateX').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas2-rotateX').on('slide', function () {
+  canvas2Adjustment.rX = parseFloat($("#canvas2-rotateX").val());
+});
+
+$('#canvas2-rotateY').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas2-rotateY').on('slide', function () {
+  canvas2Adjustment.rY = parseFloat($("#canvas2-rotateY").val());
+});
+
+$('#canvas2-rotateZ').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas2-rotateZ').on('slide', function () {
+  canvas2Adjustment.rZ = parseFloat($("#canvas2-rotateZ").val());
+});
+
+$('#canvas2-smooth').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [16]
+  }
+});
+
+$('#canvas2-smooth').on('slide', function () {
+  canvas2Adjustment.x1 = parseFloat($("#canvas2-smooth").val());
+});
+
+/************************Sliders For Canvas0************************/
+$('#canvas3-scale').noUiSlider({
+  start: [0.1],
+  step: 0.01,
+  range: {
+    'min': [0.1],
+    'max': [0.3]
+  }
+});
+
+$('#canvas3-scale').on('slide', function () {
+  canvas3Adjustment.scale = parseFloat($("#canvas3-scale").val());
+});
+
+$('#canvas3-translateX').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas3-translateX').on('slide', function () {
+  canvas3Adjustment.translateX = parseFloat($("#canvas3-translateX").val());
+});
+
+$('#canvas3-translateY').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas3-translateY').on('slide', function () {
+  canvas3Adjustment.translateY = parseFloat($("#canvas3-translateY").val());
+});
+
+$('#canvas3-translateZ').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvas3-translateZ').on('slide', function () {
+  canvas3Adjustment.translateZ = parseFloat($("#canvas3-translateZ").val());
+});
+
+$('#canvas3-rotateX').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas3-rotateX').on('slide', function () {
+  canvas3Adjustment.rX = parseFloat($("#canvas3-rotateX").val());
+});
+
+$('#canvas3-rotateY').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas3-rotateY').on('slide', function () {
+  canvas3Adjustment.rY = parseFloat($("#canvas3-rotateY").val());
+});
+
+$('#canvas3-rotateZ').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvas3-rotateZ').on('slide', function () {
+  canvas3Adjustment.rY = parseFloat($("#canvas3-rotateY").val());
+});
+
+$('#canvas3-smooth').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [16]
+  }
+});
+
+$('#canvas3-smooth').on('slide', function () {
+  canvas3Adjustment.x1 = parseFloat($("#canvas3-smooth").val());
+});

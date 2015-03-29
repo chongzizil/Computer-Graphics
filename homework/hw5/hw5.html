@@ -1,55 +1,7 @@
-<!DOCTYPE html>
-<html>
-<html lang="en" ng-app="computerGraphics">
-<head>
-  <meta charset="utf-8">
-  <!--<meta Content-Type="text/csv"/>-->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
-  <meta name="description"
-        content="This website holds the homework of Computer Graphics">
-  <meta name="author" content="Youlong Li">
-  <title>Computer Graphics</title>
-  <!-- Bootstrap core CSS -->
-  <link href="../../bower_components/bootstrap/dist/css/bootstrap.css"
-        rel="stylesheet">
-  <link href="slider/css/slider.css" rel="stylesheet">
-  <!-- Custom styles -->
-  <link href="../../app.css" rel="stylesheet">
-  <!-- JS Files -->
-  <script src="../../bower_components/jquery/dist/jquery.js"></script>
-  <script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="../lib/lib1.js"></script>
-  <script src="../hw5/hw5-lib.js"></script>
-  <script src="slider/js/bootstrap-slider.js"></script>
+<script src="homework/hw5/hw5-lib.js"></script>
+<script src="homework/hw5/hw5-canvas.js"></script>
 
-</head>
-<body ng-cloak ng-controller="mainCtrl">
-
-<h1 id="title">Computer Graphics</h1>
-
-<h2 id="author">Youlong Li</h2>
-
-<div class="button-panel">
-  <a href="../../Contents.html" class="btn btn-primary">Contents</a>
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle"
-            data-toggle="dropdown" aria-expanded="false">
-      HW5<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="hw5.html">HW5</a></li>
-      <li class="divider"></li>
-      <li><a href="Cubes.html">Cubes - for fun</a></li>
-    </ul>
-  </div>
-</div>
-
-<hr/>
-
-<div id="show-box">
+<div id="canvas-container">
   <table>
     <tr>
       <td>
@@ -59,79 +11,37 @@
       <td class="content">
         <div class="slider-bars">
           <p>
-            <input type="text" id="playground-scale"
-                   class="slider slider-horizontal" value="0.1"
-                   data-slider-min="0.01"
-                   data-slider-max="0.3" data-slider-step=".01"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+            <div class="slider" id="playground-scale"></div>
             scale
           </p>
 
           <p>
-            <input type="text" id="playground-translateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+          <div class="slider" id="playground-translateX"></div>
             translate X
           </p>
 
           <p>
-            <input type="text" id="playground-translateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+          <div class="slider" id="playground-translateY"></div>
             translate Y
           </p>
 
           <p>
-            <input type="text" id="playground-translateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+          <div class="slider" id="playground-translateZ"></div>
             translate Z
           </p>
 
           <p>
-            <input type="text" id="playground-rotateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+          <div class="slider" id="playground-rotateX"></div>
             Rotate X
           </p>
 
           <p>
-            <input type="text" id="playground-rotateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+          <div class="slider" id="playground-rotateY"></div>
             Rotate Y
           </p>
 
           <p>
-            <input type="text" id="playground-rotateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
+          <div class="slider" id="playground-rotateZ"></div>
             Rotate Z
           </p>
           <p>
@@ -150,81 +60,38 @@
       <td class="content">
         <div class="slider-bars">
           <p>
-            <input type="text" id="canvas0-scale"
-                   class="slider slider-horizontal"
-                   value="0.1"
-                   data-slider-min="0.01"
-                   data-slider-max="0.3" data-slider-step=".01"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            scale
+          <div class="slider" id="canvas0-scale"></div>
+          scale
           </p>
 
           <p>
-            <input type="text" id="canvas0-translateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate X
+          <div class="slider" id="canvas0-translateX"></div>
+          translate X
           </p>
 
           <p>
-            <input type="text" id="canvas0-translateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Y
+          <div class="slider" id="canvas0-translateY"></div>
+          translate Y
           </p>
 
           <p>
-            <input type="text" id="canvas0-translateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Z
+          <div class="slider" id="canvas0-translateZ"></div>
+          translate Z
           </p>
 
           <p>
-            <input type="text" id="canvas0-rotateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate X
+          <div class="slider" id="canvas0-rotateX"></div>
+          Rotate X
           </p>
 
           <p>
-            <input type="text" id="canvas0-rotateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Y
+          <div class="slider" id="canvas0-rotateY"></div>
+          Rotate Y
           </p>
 
           <p>
-            <input type="text" id="canvas0-rotateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Z
+          <div class="slider" id="canvas0-rotateZ"></div>
+          Rotate Z
           </p>
 
           <p>Bunch of icosahedron :)</p>
@@ -239,81 +106,38 @@
       <td class="content">
         <div class="slider-bars">
           <p>
-            <input type="text" id="canvas1-scale"
-                   class="slider slider-horizontal"
-                   value="0.1"
-                   data-slider-min="0.01"
-                   data-slider-max="0.3" data-slider-step=".01"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            scale
+          <div class="slider" id="canvas1-scale"></div>
+          scale
           </p>
 
           <p>
-            <input type="text" id="canvas1-translateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate X
+          <div class="slider" id="canvas1-translateX"></div>
+          translate X
           </p>
 
           <p>
-            <input type="text" id="canvas1-translateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Y
+          <div class="slider" id="canvas1-translateY"></div>
+          translate Y
           </p>
 
           <p>
-            <input type="text" id="canvas1-translateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Z
+          <div class="slider" id="canvas1-translateZ"></div>
+          translate Z
           </p>
 
           <p>
-            <input type="text" id="canvas1-rotateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate X
+          <div class="slider" id="canvas1-rotateX"></div>
+          Rotate X
           </p>
 
           <p>
-            <input type="text" id="canvas1-rotateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Y
+          <div class="slider" id="canvas1-rotateY"></div>
+          Rotate Y
           </p>
 
           <p>
-            <input type="text" id="canvas1-rotateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Z
+          <div class="slider" id="canvas1-rotateZ"></div>
+          Rotate Z
           </p>
 
           <p>Some shapes...</p>
@@ -328,92 +152,43 @@
       <td class="content">
         <div class="slider-bars">
           <p>
-            <input type="text" id="canvas2-scale"
-                   class="slider slider-horizontal"
-                   value="0.1"
-                   data-slider-min="0.01"
-                   data-slider-max="0.3" data-slider-step=".01"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            scale
+          <div class="slider" id="canvas2-scale"></div>
+          scale
           </p>
 
           <p>
-            <input type="text" id="canvas2-translateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate X
+          <div class="slider" id="canvas2-translateX"></div>
+          translate X
           </p>
 
           <p>
-            <input type="text" id="canvas2-translateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Y
+          <div class="slider" id="canvas2-translateY"></div>
+          translate Y
           </p>
 
           <p>
-            <input type="text" id="canvas2-translateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Z
+          <div class="slider" id="canvas2-translateZ"></div>
+          translate Z
           </p>
 
           <p>
-            <input type="text" id="canvas2-rotateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate X
+          <div class="slider" id="canvas2-rotateX"></div>
+          Rotate X
           </p>
 
           <p>
-            <input type="text" id="canvas2-rotateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Y
+          <div class="slider" id="canvas2-rotateY"></div>
+          Rotate Y
           </p>
 
           <p>
-            <input type="text" id="canvas2-rotateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Z
+          <div class="slider" id="canvas2-rotateZ"></div>
+          Rotate Z
           </p>
 
           <p>
-            <input type="text" id="canvas2-x1"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="16" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Smooth
+          <div class="slider" id="canvas2-smooth"></div>
+          Smooth
           </p>
 
           <p>Cube - Cylinder</p>
@@ -427,92 +202,43 @@
       <td class="content">
         <div class="slider-bars">
           <p>
-            <input type="text" id="canvas3-scale"
-                   class="slider slider-horizontal"
-                   value="0.16"
-                   data-slider-min="0"
-                   data-slider-max="0.5" data-slider-step=".01"
-                   data-slider-value="0.16"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            scale
+          <div class="slider" id="canvas3-scale"></div>
+          scale
           </p>
 
           <p>
-            <input type="text" id="canvas3-translateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate X
+          <div class="slider" id="canvas3-translateX"></div>
+          translate X
           </p>
 
           <p>
-            <input type="text" id="canvas3-translateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Y
+          <div class="slider" id="canvas3-translateY"></div>
+          translate Y
           </p>
 
           <p>
-            <input type="text" id="canvas3-translateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="1" data-slider-step=".1"
-                   data-slider-value="0.1"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            translate Z
+          <div class="slider" id="canvas3-translateZ"></div>
+          translate Z
           </p>
 
           <p>
-            <input type="text" id="canvas3-rotateX"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="30"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate X
+          <div class="slider" id="canvas3-rotateX"></div>
+          Rotate X
           </p>
 
           <p>
-            <input type="text" id="canvas3-rotateY"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Y
+          <div class="slider" id="canvas3-rotateY"></div>
+          Rotate Y
           </p>
 
           <p>
-            <input type="text" id="canvas3-rotateZ"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="180" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Rotate Z
+          <div class="slider" id="canvas3-rotateZ"></div>
+          Rotate Z
           </p>
 
           <p>
-            <input type="text" id="canvas3-x1"
-                   class="slider slider-horizontal" value="0"
-                   data-slider-min="0"
-                   data-slider-max="18" data-slider-step="1"
-                   data-slider-value="0"
-                   data-slider-selection="after"
-                   data-slider-tooltip="hide">
-            Smooth
+          <div class="slider" id="canvas3-smooth"></div>
+          Smooth
           </p>
 
           <p>Sphere</p>
@@ -521,8 +247,3 @@
     </tr><!--Shpere Slide bars-->
   </table>
 </div>
-
-<script src="../hw5/hw5-canvas.js"></script>
-
-</body>
-</html>

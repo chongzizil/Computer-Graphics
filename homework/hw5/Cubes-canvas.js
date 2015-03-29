@@ -203,3 +203,95 @@ var moveCube = function (cubes, cubesPhase, i, speed) {
 
   cubes[i].coord.add(move);
 };
+
+/************************Sliders************************/
+$('#canvasCubes-scale').noUiSlider({
+  start: [0.1],
+  step: 0.01,
+  range: {
+    'min': [0.01],
+    'max': [0.3]
+  }
+});
+
+$('#canvasCubes-scale').on('slide', function () {
+  playgroundCubesAdjustment.scale = parseFloat($("#canvasCubes-scale").val());
+});
+
+$('#canvasCubes-translateX').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvasCubes-translateX').on('slide', function () {
+  playgroundCubesAdjustment.translateX = parseFloat($("#canvasCubes-translateX").val());
+});
+
+$('#canvasCubes-translateY').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvasCubes-translateY').on('slide', function () {
+  playgroundCubesAdjustment.translateY = parseFloat($("#canvasCubes-translateY").val());
+});
+
+$('#canvasCubes-translateZ').noUiSlider({
+  start: [0.0],
+  step: 0.01,
+  range: {
+    'min': [0.0],
+    'max': [1.0]
+  }
+});
+
+$('#canvasCubes-translateZ').on('slide', function () {
+  playgroundCubesAdjustment.translateZ = parseFloat($("#canvasCubes-translateZ").val());
+});
+
+$('#canvasCubes-rotateX').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvasCubes-rotateX').on('slide', function () {
+  playgroundCubesAdjustment.rX = parseFloat($("#canvasCubes-rotateX").val());
+});
+
+$('#canvasCubes-rotateY').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvasCubes-rotateY').on('slide', function () {
+  playgroundCubesAdjustment.rY = parseFloat($("#canvasCubes-rotateY").val());
+});
+
+$('#canvasCubes-rotateZ').noUiSlider({
+  start: [0.0],
+  step: 1,
+  range: {
+    'min': [0.0],
+    'max': [180.0]
+  }
+});
+
+$('#canvasCubes-rotateZ').on('slide', function () {
+  playgroundCubesAdjustment.rZ = parseFloat($("#canvasCubes-rotateZ").val());
+});

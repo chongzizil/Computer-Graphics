@@ -11,7 +11,12 @@ body {
   margin: 20px;
 }
 
-#show-box {
+.homework-button-panel {
+  text-align: center;
+  margin: 20px;
+}
+
+#canvas-container {
   text-align: center;
 }
 

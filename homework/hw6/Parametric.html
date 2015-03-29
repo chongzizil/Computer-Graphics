@@ -1,64 +1,11 @@
-<!DOCTYPE html>
-<html>
-<html lang="en" ng-app="computerGraphics">
-<head>
-  <meta charset="utf-8">
-  <!--<meta Content-Type="text/csv"/>-->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
-  <meta name="description"
-        content="This website holds the homework of Computer Graphics">
-  <meta name="author" content="Youlong Li">
-  <title>Computer Graphics</title>
-  <!-- Bootstrap core CSS -->
-  <link href="../../bower_components/bootstrap/dist/css/bootstrap.css"
-        rel="stylesheet">
-  <link
-      href="../../bower_components/nouislider/distribute/jquery.nouislider.min.css"
-      rel="stylesheet">
-  <!--Bootstrap Select Css-->
-  <link
-      href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
-      rel="stylesheet">
-  <!-- Custom styles -->
-  <link href="../../app.css" rel="stylesheet">
-  <!-- JS Files -->
-  <script src="../../bower_components/jquery/dist/jquery.js"></script>
-  <script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-  <script
-      src="../../bower_components/nouislider/distribute/jquery.nouislider.all.min.js"></script>
-  <!--Bootstrap Select-->
-  <script
-      src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+<script src="homework/hw6/hw6-lib.js"></script>
+<script src="homework/lib/Noise.js"></script>
+<script src="homework/hw6/Vector3.js"></script>
+<script src="homework/hw6/Matrix.js"></script>
+<script src="homework/hw6/Parametric.js"></script>
+<script src="homework/hw6/Parametric-canvas.js"></script>
 
-</head>
-<body ng-cloak ng-controller="mainCtrl">
-
-<h1 id="title">Computer Graphics</h1>
-
-<h2 id="author">Youlong Li</h2>
-
-<div class="button-panel">
-  <a href="../../Contents.html" class="btn btn-primary">Contents</a>
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle"
-            data-toggle="dropdown" aria-expanded="false">
-      HW6<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="Parametric.html">Parametric</a></li>
-      <li class="divider"></li>
-      <li><a href="greedy-snake.html">Greedy Snake</a></li>
-      <li><a href="match-man.html">Match Man</a></li>
-    </ul>
-  </div>
-</div>
-
-<hr/>
-
-<div id="show-box">
+<div id="canvas-container">
   <div class="row">
     <div class="col-sm-6">
       <canvas id=playground width=600 height=600></canvas>
@@ -148,12 +95,4 @@
       </div>
     </div>
   </div>
-
-  <script src="hw6-lib.js"></script>
-  <script src="../lib/Noise.js"></script>
-  <script src="Vector3.js"></script>
-  <script src="Matrix.js"></script>
-  <script src="Parametric.js"></script>
-  <script src="Parametric-canvas.js"></script>
-</body>
-</html>
+</div>

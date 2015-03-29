@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="computer-graphics">
 <html lang="en" ng-app="computerGraphics">
 <head>
   <meta charset="utf-8">
@@ -9,88 +9,122 @@
   <meta name="description" content="This website holds the homework of Computer Graphics">
   <meta name="author" content="Youlong Li">
   <title>Computer Graphics</title>
+
   <!-- Bootstrap core CSS -->
-  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Other -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
+  <link rel="stylesheet" href="bower_components/nouislider/distribute/jquery.nouislider.min.css">
+  <link rel="stylesheet" href="bower_components/jquery-ui-slider-pips/dist/jquery-ui-slider-pips.css">
   <!-- Custom styles -->
   <link href="app.css" rel="stylesheet">
-  <!-- JS Files -->
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="homework/lib/lib1.js"></script>
 </head>
-<body ng-cloak ng-controller="mainCtrl">
+<body ng-cloak>
 
-<h1 id="title">Computer Graphics</h1>
-<h2 id="author">Youlong Li</h2>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Computer Graphics</a>
+    </div>
 
-<div class="button-panel">
-  <a href="Contents.html" class="btn btn-primary">Contents</a>
-  <a href="homework/hw1/hw1.html" class="btn btn-primary">HW1</a>
-  <a href="homework/hw2/hw2.html" class="btn btn-primary">HW2</a>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#/Contents">Contents</a></li>
+        <!--Homework 1-->
+        <li><a href="#/hw1">HW1</a></li>
+        <!--Homework 2-->
+        <li><a href="#/hw2">HW2</a></li>
+        <!--Homework 3-->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">HW3<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#/hw3/Matrix">Matrix</a></li>
+            <li><a href="#/hw3/Bounce">Bounce</a></li>
+            <li class="divider"></li>
+            <li><a href="#/hw3/BlinnModel">Blinn</a></li>
+            <li><a href="#/hw3/PhongModel">Phong</a></li>
+            <li><a href="#/hw3/Reflection">Reflection</a></li>
+            <li><a href="#/hw3/BooleanIntersection">BooleanIntersection</a></li>
+          </ul>
+        </li>
+        <!--Homework 4-->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">HW4<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#/hw4/Triangle">Triangle</a></li>
+            <li><a href="#/hw4/Hexagon">Hexagon</a></li>
+            <li><a href="#/hw4/Cylinder">Cylinder</a></li>
+            <li><a href="#/hw4/WoodTexture">WoodTexture</a></li>
+            <li><a href="#/hw4/Refraction">Refraction</a></li>
+            <li><a href="#/hw4/Cube">Cube</a></li>
+          </ul>
+        </li>
+        <!--Homework 5-->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">HW5<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#/hw5/">HW5</a></li>
+            <li class="divider"></li>
+            <li><a href="#/hw5/Cubes">Cubes - for fun</a></li>
+          </ul>
+        </li>
+        <!--Homework 6-->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">HW6<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#/hw6/Parametric">Parametric</a></li>
+            <li class="divider"></li>
+            <li><a href="#/hw6/greedySnake">Greedy Snake</a></li>
+            <li><a href="#/hw6/matchMan">Match Man</a></li>
+          </ul>
+        </li>
+        <!--Homework 7-->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">HW7<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#/hw7/HW7">HW7</a></li>
+            <li class="divider"></li>
+            <li><a href="#/hw7/CurveEditor">Curve-Editor</a></li>
+          </ul>
+        </li>
+      </ul>
 
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      HW3<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="homework/hw3/Matrix.html">Matrix</a></li>
-      <li><a href="homework/hw3/Bounce.html">Bounce</a></li>
-      <li class="divider"></li>
-      <li><a href="homework/hw3/BlinnModel.html">Blinn</a></li>
-      <li><a href="homework/hw3/PhongModel.html">Phong</a></li>
-      <li><a href="homework/hw3/Reflection.html">Reflection</a></li>
-      <li><a href="homework/hw3/BooleanIntersection.html">BooleanIntersection</a></li>
-    </ul>
-  </div>
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      HW4<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="homework/hw4/Triangle.html">Triangle</a></li>
-      <li><a href="homework/hw4/Hexagon.html">Hexagon</a></li>
-      <li><a href="homework/hw4/Cylinder.html">Cylinder</a></li>
-      <li><a href="homework/hw4/WoodTexture.html">WoodTexture</a></li>
-      <li><a href="homework/hw4/Refraction.html">Refraction</a></li>
-      <li><a href="homework/hw4/Cube.html">Cube</a></li>
-      <li class="divider"></li>
-      <li><a href="homework/hw4/Experiment.html">Experiment</a></li>
-    </ul>
-  </div>
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle"
-            data-toggle="dropdown" aria-expanded="false">
-      HW5<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="homework/hw5/hw5.html">HW5</a></li>
-      <li class="divider"></li>
-      <li><a href="homework/hw5/Cubes.html">Cubes - for fun</a></li>
-    </ul>
-  </div>
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle"
-            data-toggle="dropdown" aria-expanded="false">
-      HW6<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="homework/hw6/Parametric.html">Parametric</a></li>
-      <li class="divider"></li>
-      <li><a href="homework/hw6/greedy-snake.html">Greedy Snake</a></li>
-      <li><a href="homework/hw6/match-man.html">Match Man</a></li>
-    </ul>
-  </div>
-</div>
-
-<hr/>
-
-<div id="show-box">
-  <ng-view></ng-view>
-</div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#/Contents">Youlong Li</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
 
+<ng-view></ng-view>
+
+<!------------------------------ JQuery ------------------------------>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!------------------------------ JQuery UI ------------------------------>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!------------------------------ Bootstrap ------------------------------>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<!------------------------------ Angular ------------------------------>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-resource.min.js"></script>
+<!------------------------------ Others ------------------------------>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+<script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+<script src="bower_components/nouislider/distribute/jquery.nouislider.all.min.js"></script>
+<script src="bower_components/jquery-ui-slider-pips/dist/jquery-ui-slider-pips.min.js"></script>
+<!------------------------------ Custom ------------------------------>
+<script src="app.js"></script>
+<!--<script src="homework/hw7/CurveEditor.js"></script>-->
 </body>
 </html>

@@ -1,56 +1,12 @@
-<!DOCTYPE html>
-<html>
-<html lang="en" ng-app="computerGraphics">
-<head>
-  <meta charset="utf-8">
-  <!--<meta Content-Type="text/csv"/>-->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
-  <meta name="description" content="This website holds the homework of Computer Graphics">
-  <meta name="author" content="Youlong Li">
-  <title>Computer Graphics</title>
-  <!-- Bootstrap core CSS -->
-  <link href="../../bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-  <!-- Custom styles -->
-  <link href="../../app.css" rel="stylesheet">
-  <!-- JS Files -->
-  <script src="../../bower_components/jquery/dist/jquery.js"></script>
-  <script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="../lib/lib1.js"></script>
-</head>
-<body ng-cloak ng-controller="mainCtrl">
+<script src="homework/lib/lib1.js"></script>
 
-<h1 id="title">Computer Graphics</h1>
-<h2 id="author">Youlong Li</h2>
+<div id="canvas-container">
+  <h2 class="sub-title">Triangle</h2>
 
-<div class="button-panel">
-  <a href="../../Contents.html" class="btn btn-primary">Contents</a>
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      HW4<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="../hw4/Triangle.html">Triangle</a></li>
-      <li><a href="../hw4/Hexagon.html">Hexagon</a></li>
-      <li><a href="../hw4/Cylinder.html">Cylinder</a></li>
-      <li><a href="../hw4/WoodTexture.html">WoodTexture</a></li>
-      <li><a href="../hw4/Refraction.html">Refraction</a></li>
-      <li><a href="../hw4/Cube.html">Cube</a></li>
-    </ul>
-  </div>
+  <<canvas id='canvas1' width=600 height=600></canvas>
 </div>
 
-<hr/>
-
-<div id="show-box">
-  <h1>Triangle</h1>
-
-  <body bgcolor=black>
-  <td><canvas id='canvas1' width=600 height=600></canvas></td>
-  </body>
-
-  <script id='my_vertex_shader' type='x-shader/x-vertex'>
+<script id='my_vertex_shader' type='x-shader/x-vertex'>
    attribute vec3 aPosition;
    varying   vec3 vPosition;
    void main() {
@@ -420,12 +376,8 @@
     gl_FragColor = vec4(sqrt(color), 1.); // Do Gamma correction.
   }
 </script>
-</div>
 
 <script>
   start_gl('canvas1', document.getElementById('my_vertex_shader').innerHTML,
       document.getElementById('my_fragment_shader').innerHTML);
 </script>
-
-</body>
-</html>
