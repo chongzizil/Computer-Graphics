@@ -51,7 +51,7 @@ var drawBezierSpline = function (index) {
     return;
   }
 
-  var ut = 1.0 / (num * 10);
+  var ut = 1.0 / (num * 20);
   var res = [];
 
   for (var t = 0; t < .999; t += ut) {
@@ -65,7 +65,7 @@ var drawHermiteSpline = function (P0, P1, R0, R1) {
   var hermite = new Hermite();
   hermite.setParam(P0, P1, R0, R1);
 
-  var ut = 1.0 / 10;
+  var ut = 1.0 / 20;
   var res = [];
 
   for (var t = 0; t < .999; t += ut) {
