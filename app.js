@@ -80,6 +80,9 @@ app.config(['$routeProvider',
         when('/hw7/CurveEditor', {
           templateUrl: 'homework/hw7/CurveEditor.html'
         }).
+        when('/hw8/HW8', {
+          templateUrl: 'homework/hw8/HW8.html'
+        }).
         otherwise({
           redirectTo: 'Contents.html'
         });
