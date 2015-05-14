@@ -1,52 +1,50 @@
-<!DOCTYPE html>
-<html ng-app="computer-graphics">
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <!--<meta Content-Type="text/csv"/>-->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
-  <meta name="description"
-        content="This website holds the homework of Computer Graphics">
-  <meta name="author" content="Youlong Li">
-  <title>Computer Graphics</title>
-</head>
-<body ng-cloak>
+<dic>
+  <h4>
+    <span class="label label-primary"><b>W:</b> up</span>
+    <span class="label label-primary"><b>S:</b> down</span>
+    <span class="label label-primary"><b>A:</b> left</span>
+    <span class="label label-primary"><b>D:</b> right</span>
+    <span class="label label-info"><b>M:</b> sound on/off</span>
+    <span class="label label-info"><b>N:</b> new game</span>
+    <span class="label label-info"><b>Space:</b> pause/resume</span>
+  </h4>
+  <h4>
+    <span class="label label-warning"><b>Rotate camera:</b> Right press and move the mouse.</span>
+    <span class="label label-warning"><b>Move camera:</b> Left press and move the mouse.</span>
+    <span class="label label-warning"><b>Zoom camera:</b> Use the mouse wheel.</span>
+  </h4>
 
-<div id="pacman">
+  <div id="pacman">
 
-</div>
+  </div>
 
 <span id="audio">
   <audio id="theme" preload="auto">
-    <source src="wav/theme.wav" type="audio/wav">
-    <source src="mp3/theme.mp3" type="audio/mpeg">
+    <source src="homework/project/wav/theme.wav" type="audio/wav">
+    <source src="homework/project/mp3/theme.mp3" type="audio/mpeg">
   </audio>
   <audio id="waka" preload="auto">
-    <source src="wav/waka.wav" type="audio/wav">
-    <source src="mp3/waka.mp3" type="audio/mpeg">
+    <source src="homework/project/wav/waka.wav" type="audio/wav">
+    <source src="homework/project/mp3/waka.mp3" type="audio/mpeg">
   </audio>
   <audio id="die" preload="auto">
-    <source src="wav/die.wav" type="audio/wav">
-    <source src="mp3/die.mp3" type="audio/mpeg">
+    <source src="homework/project/wav/die.wav" type="audio/wav">
+    <source src="homework/project/mp3/die.mp3" type="audio/mpeg">
   </audio>
   <audio id="powerpill" preload="auto">
-    <source src="wav/powerpill.wav" type="audio/wav">
-    <source src="mp3/powerpill.mp3" type="audio/mpeg">
+    <source src="homework/project/wav/powerpill.wav" type="audio/wav">
+    <source src="homework/project/mp3/powerpill.mp3" type="audio/mpeg">
   </audio>
 </span>
 
-<!------------------------------ JQuery ------------------------------>
-<script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<!------------------------------ Others ------------------------------>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
-<script src="js/OrbitControls.js"></script>
-<!------------------------------ Custom ------------------------------>
-<script src="js/Pacman.js"></script>
-<script src="js/main.js"></script>
-
-</body>
-</html>
+  <!------------------------------ Three.js ------------------------------>
+  <!--<script-->
+      <!--src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>-->
+  <!------------------------------ Pacman ------------------------------>
+  <script src="homework/project/js/helvetiker_bold.typeface.js"></script>
+  <script src="homework/project/js/helvetiker_regular.typeface.js"></script>
+  <script src="homework/project/js/WindowResize.js"></script>
+  <script src="homework/project/js/OrbitControls.js"></script>
+  <script src="homework/project/js/Pacman.js"></script>
+  <script src="homework/project/js/main.js"></script>
+</dic>

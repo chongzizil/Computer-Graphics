@@ -83,6 +83,9 @@ app.config(['$routeProvider',
         when('/hw8/HW8', {
           templateUrl: 'homework/hw8/HW8.html'
         }).
+        when('/project/pacman', {
+          templateUrl: 'homework/project/pacman.html'
+        }).
         otherwise({
           redirectTo: 'Contents.html'
         });

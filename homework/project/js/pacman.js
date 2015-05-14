@@ -3,7 +3,8 @@ PacmanFigureObjects = function (options) {
     red: '#D0021B',
     blue: '#A0CCFF',
     pink: '#F5A7B1',
-    orange: '#F5A623'
+    orange: '#F5A623',
+    dead: '#2E78CE'
   };
   var container = new THREE.Object3D;
   var texture;
@@ -20,7 +21,7 @@ PacmanFigureObjects = function (options) {
   options.isDizzy = options.isDizzy !== undefined ? options.isDizzy : false;
 
   if (options.type === 'pacman') {
-    texture = THREE.ImageUtils.loadTexture("images/pacman_face.png");
+    texture = THREE.ImageUtils.loadTexture("homework/project/images/pacman_face.png");
     geometry = new THREE.SphereGeometry(options.radius, 32, 32);
     material = new THREE.MeshBasicMaterial({map: texture});
     mesh = new THREE.Mesh(geometry, material);
@@ -29,29 +30,26 @@ PacmanFigureObjects = function (options) {
   } else if (options.type === 'ghost') {
     switch (options.color) {
       case "red":
-        texture = !options.isDizzy ?
-            THREE.ImageUtils.loadTexture("images/ghost_red.png") :
-            THREE.ImageUtils.loadTexture("images/ghost_red_dizzy.png");
+        texture = THREE.ImageUtils.loadTexture("homework/project/images/ghost_red.png");
         color = colors.red;
         break;
       case "blue":
-        texture = !options.isDizzy ?
-            THREE.ImageUtils.loadTexture("images/ghost_blue.png") :
-            THREE.ImageUtils.loadTexture("images/ghost_blue_dizzy.png");
+        texture = THREE.ImageUtils.loadTexture("homework/project/images/ghost_blue.png");
         color = colors.blue;
         break;
       case "pink":
-        texture = !options.isDizzy ?
-            THREE.ImageUtils.loadTexture("images/ghost_pink.png") :
-            THREE.ImageUtils.loadTexture("images/ghost_pink_dizzy.png");
+        texture = THREE.ImageUtils.loadTexture("homework/project/images/ghost_pink.png");
         color = colors.pink;
         break;
       default:
-        texture = !options.isDizzy ?
-            THREE.ImageUtils.loadTexture("images/ghost_orange.png") :
-            THREE.ImageUtils.loadTexture("images/ghost_orange_dizzy.png");
+        texture = THREE.ImageUtils.loadTexture("homework/project/images/ghost_orange.png");
         color = colors.orange;
         break;
+    }
+
+    if (options.isDizzy) {
+      texture = THREE.ImageUtils.loadTexture("homework/project/images/ghost_dizzy.png");
+      color = colors.dead;
     }
 
     // Create the head
@@ -68,7 +66,7 @@ PacmanFigureObjects = function (options) {
     mesh.position.y = options.radius / 2;
     container.add(mesh)
   } else if (options.type === 'eyes') {
-    texture = THREE.ImageUtils.loadTexture("images/eye.png");
+    texture = THREE.ImageUtils.loadTexture("homework/project/images/eye.png");
     // Right eye
     geometry = new THREE.SphereGeometry(options.radius / 4, 32, 32);
     material = new THREE.MeshBasicMaterial({map: texture});

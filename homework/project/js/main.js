@@ -1,7 +1,10 @@
 /*************************************************** Global Variables *************************************************/
 var pacmanScene;
 var gameSpeed = 2;
+var gRadius = 15;
 var refreshCount = 0;
+var hasBuiltWall = false;
+var pills = [];
 var game = new Game();
 
 // Figures
@@ -11,17 +14,11 @@ var pacman, // PACMAN
     clyde, // POKEY (Orange)
     pinky; // SPEEDY (Pink)
 
-var PACMAN_RADIUS = 15;
-
 // Meshes for Three.js
 var meshes = {
   pacman: new PacmanFigureObjects({
     type: 'pacman',
-    radius: this.radius
-  }),
-  eyes: new PacmanFigureObjects({
-    type: 'eyes',
-    radius: this.radius
+    radius: gRadius
   }),
   ghosts: {
     inky: {
@@ -29,13 +26,16 @@ var meshes = {
         type: 'ghost',
         color: 'blue',
         isDizzy: false,
-        radius: this.radius
+        radius: gRadius
       }),
       dizzy: new PacmanFigureObjects({
         type: 'ghost',
-        color: 'blue',
         isDizzy: true,
-        radius: this.radius
+        radius: gRadius
+      }),
+      eyes: new PacmanFigureObjects({
+        type: 'eyes',
+        radius: gRadius
       })
     },
     blinky: {
@@ -43,13 +43,16 @@ var meshes = {
         type: 'ghost',
         color: 'red',
         isDizzy: false,
-        radius: this.radius
+        radius: gRadius
       }),
       dizzy: new PacmanFigureObjects({
         type: 'ghost',
-        color: 'red',
         isDizzy: true,
-        radius: this.radius
+        radius: gRadius
+      }),
+      eyes: new PacmanFigureObjects({
+        type: 'eyes',
+        radius: gRadius
       })
     },
     clyde: {
@@ -57,13 +60,16 @@ var meshes = {
         type: 'ghost',
         color: 'orange',
         isDizzy: false,
-        radius: this.radius
+        radius: gRadius
       }),
       dizzy: new PacmanFigureObjects({
         type: 'ghost',
-        color: 'orange',
         isDizzy: true,
-        radius: this.radius
+        radius: gRadius
+      }),
+      eyes: new PacmanFigureObjects({
+        type: 'eyes',
+        radius: gRadius
       })
     },
     pinky: {
@@ -71,13 +77,16 @@ var meshes = {
         type: 'ghost',
         color: 'pink',
         isDizzy: false,
-        radius: this.radius
+        radius: gRadius
       }),
       dizzy: new PacmanFigureObjects({
         type: 'ghost',
-        color: 'pink',
         isDizzy: true,
-        radius: this.radius
+        radius: gRadius
+      }),
+      eyes: new PacmanFigureObjects({
+        type: 'eyes',
+        radius: gRadius
       })
     }
   }
@@ -90,6 +99,140 @@ Sound.play = function (sound) {
         var audio = document.getElementById(sound);
         (audio != null) ? audio.play() : console.log(sound + " not found");
     }
+};
+
+// Score
+var Score = function() {
+  this.fontMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+  this.sideMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+  this.materialArray = [ this.fontMaterial, this.sideMaterial ];
+  this.scoreMaterial = new THREE.MeshFaceMaterial(this.materialArray);
+  this.scoreGeometry;
+  this.scoreMesh;
+  this.scale = .75;
+  this.score = 0;
+  this.mesh;
+  this.set = function(i) {
+    this.score = i;
+    this.refresh();
+  };
+  this.add = function(i) {
+    this.score += i;
+    this.refresh();
+  };
+  this.refresh = function() {
+    if (this.scoreMesh !== undefined && this.scoreMesh !== null) {
+      pacmanScene.scene.remove(this.scoreMesh);
+    }
+    this.scoreGeometry = new THREE.TextGeometry( "Score: " + this.score,
+        {
+          size: 30, height: 4, curveSegments: 3,
+          font: "helvetiker", weight: "normal", style: "normal",
+          bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+          material: 0, extrudeMaterial: 1
+        });
+
+    this.scoreMesh = new THREE.Mesh(this.scoreGeometry, this.scoreMaterial);
+    this.scoreMesh.scale.set(this.scale, this.scale, this.scale);
+    this.scoreMesh.position.set(0, 410, 0);
+    pacmanScene.scene.add(this.scoreMesh);
+  };
+};
+
+// Lives
+var Lives = function() {
+  this.lives;
+  this.avalableLives = 4;
+  this.startX = 760;
+  this.startY = 620;
+  this.scale = .3;
+
+  this.set = function(i) {
+    this.avalableLives = i;
+    this.refresh();
+  };
+  this.add = function(i) {
+    this.avalableLives += i;
+    this.refresh();
+  };
+  this.minus = function(i) {
+    this.avalableLives -= i;
+    this.refresh();
+  };
+  this.isFinalDead = function () {
+    return this.avalableLives === 0;
+  };
+  this.getHeartMesh = function(x, y, z) {
+    var heartShape = new THREE.Shape(); // From http://blog.burlock.org/html5/130-paths
+    heartShape.moveTo( x + 25, y + 25 );
+    heartShape.bezierCurveTo( x + 25, y + 25, x + 20, y, x, y );
+    heartShape.bezierCurveTo( x - 30, y, x - 30, y + 35,x - 30,y + 35 );
+    heartShape.bezierCurveTo( x - 30, y + 55, x - 10, y + 77, x + 25, y + 95 );
+    heartShape.bezierCurveTo( x + 60, y + 77, x + 80, y + 55, x + 80, y + 35 );
+    heartShape.bezierCurveTo( x + 80, y + 35, x + 80, y, x + 50, y );
+    heartShape.bezierCurveTo( x + 35, y, x + 25, y + 25, x + 25, y + 25 );
+    var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+    var geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings );
+    var mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: '#f00000' } ) );
+    mesh.position.set(x, y, 0);
+    mesh.rotateZ(Math.PI);
+    mesh.scale.set(this.scale, this.scale, this.scale);
+    return mesh;
+  };
+  this.refresh = function() {
+    if (this.lives !== undefined && this.lives !== null) {
+      pacmanScene.scene.remove(this.lives);
+    }
+
+    this.lives = new THREE.Object3D();
+    for (var i = 0; i < this.avalableLives; i++) {
+      this.lives.add(this.getHeartMesh(this.startX - i * 60, this.startY, 0));
+    }
+
+    pacmanScene.scene.add(this.lives);
+  };
+};
+
+// State
+var State = function() {
+  this.fontMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+  this.sideMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+  this.materialArray = [ this.fontMaterial, this.sideMaterial ];
+  this.stateMaterial = new THREE.MeshFaceMaterial(this.materialArray);
+  this.stateGeometry;
+  this.stateMesh;
+  this.scale = .75;
+  this.score = 0;
+  this.mesh;
+  this.stateText;
+  this.refresh = function() {
+    if (game.gameOver) {
+      this.stateText = "Game Over";
+    } else if (game.isPaused) {
+      this.stateText = "Paused";
+    } else {
+      this.stateText = "Eating";
+    }
+
+    if (this.stateMesh !== undefined && this.stateMesh !== null) {
+      pacmanScene.scene.remove(this.stateMesh);
+    }
+    this.stateGeometry = new THREE.TextGeometry( this.stateText,
+        {
+          size: 30, height: 4, curveSegments: 3,
+          font: "helvetiker", weight: "normal", style: "normal",
+          bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+          material: 0, extrudeMaterial: 1
+        });
+
+    this.stateGeometry.computeBoundingBox();
+    var textWidth = this.stateGeometry.boundingBox.max.x - this.stateGeometry.boundingBox.min.x;
+
+    this.stateMesh = new THREE.Mesh(this.stateGeometry, this.stateMaterial);
+    this.stateMesh.scale.set(this.scale, this.scale, this.scale);
+    this.stateMesh.position.set(270 - textWidth / 2, 410, 0);
+    pacmanScene.scene.add(this.stateMesh);
+  };
 };
 
 // Directions
@@ -107,29 +250,28 @@ var left = new Direction("left", -1, 0);	 // LEFT
 var down = new Direction("down", 0, -1);    // DOWN
 var right = new Direction("right", 1, 0);	 // RIGHT
 
-/*************************************************** Helper functions *************************************************/
-
 // DirectionWatcher which monitor the control input
 var directionWatcher = function () {
-    this.dir = null;
-    this.set = function (dir) {
-        this.dir = dir;
-    };
-    this.get = function () {
-        return this.dir;
-    }
+  this.dir = null;
+  this.set = function (dir) {
+    this.dir = dir;
+  };
+  this.get = function () {
+    return this.dir;
+  }
 };
 
-// Helper function
+/*************************************************** Helper functions *************************************************/
+
 var between = function (x, min, max) {
   return x >= min && x <= max;
 };
 
 var buildWalls = function () {
   function buildWall(gridX, gridY) {
-    var width = PACMAN_RADIUS * 2;
-    var height = PACMAN_RADIUS * 2;
-    var radius = PACMAN_RADIUS;
+    var width = gRadius * 2;
+    var height = gRadius * 2;
+    var radius = gRadius;
 
     var wallGeometry = new THREE.BoxGeometry(width, height, radius);
     var wallMaterials = new THREE.MeshBasicMaterial({color: '#106BD6'});
@@ -145,11 +287,11 @@ var buildWalls = function () {
       if (this.type === "wall") {
         buildWall(this.col, dotPosY);
       } else if (this.type === 'door') {
-        var doorGeometry = new THREE.CylinderGeometry(PACMAN_RADIUS / 8, PACMAN_RADIUS / 8, 2 * PACMAN_RADIUS);
+        var doorGeometry = new THREE.CylinderGeometry(gRadius / 8, gRadius / 8, 2 * gRadius);
         var doorMaterials = new THREE.MeshBasicMaterial({color: '#106BD6'});
         var door = new THREE.Mesh( doorGeometry, doorMaterials );
         door.rotation.z = Math.PI / 2;
-        door.position.set(this.col * 2 * PACMAN_RADIUS + PACMAN_RADIUS, dotPosY * 2 * PACMAN_RADIUS + PACMAN_RADIUS, PACMAN_RADIUS / 2);
+        door.position.set(this.col * 2 * gRadius + gRadius, dotPosY * 2 * gRadius + gRadius, gRadius / 2);
         pacmanScene.scene.add(door);
       }
     });
@@ -158,46 +300,46 @@ var buildWalls = function () {
 
 var fillPills = function () {
   var dotPosY;
-  var pillGeometry = new THREE.SphereGeometry(PACMAN_RADIUS / 4, 32, 32);
-  var powerPillGeometry = new THREE.SphereGeometry(PACMAN_RADIUS / 2, 32, 32);
+  var pillGeometry = new THREE.SphereGeometry(gRadius / 4, 32, 32);
+  var powerPillGeometry = new THREE.SphereGeometry(gRadius / 2, 32, 32);
   var pillMaterials = new THREE.MeshBasicMaterial({color: '#ffffff'});
+
+  // Clear the old ones first
+  for (var i = 0; i < pills.length; i++) {
+    pacmanScene.scene.remove(pills[i]);
+  }
+  pills = [];
+
   $.each(game.map.posY, function (i, item) {
     dotPosY = this.row;
     $.each(this.posX, function () {
       var pill;
       if (this.type === "pill") {
         pill = new THREE.Mesh( pillGeometry.clone(), pillMaterials.clone() );
-        pill.position.set(this.col * PACMAN_RADIUS * 2 + PACMAN_RADIUS, dotPosY * PACMAN_RADIUS * 2 + PACMAN_RADIUS, PACMAN_RADIUS / 4);
+        pill.position.set(this.col * gRadius * 2 + gRadius, dotPosY * gRadius * 2 + gRadius, gRadius / 4);
         pacmanScene.scene.add(pill);
       } else if (this.type === "powerpill") {
         pill = new THREE.Mesh( powerPillGeometry.clone(), pillMaterials.clone() );
-        pill.position.set(this.col * PACMAN_RADIUS * 2 + PACMAN_RADIUS, dotPosY * PACMAN_RADIUS * 2 + PACMAN_RADIUS, PACMAN_RADIUS / 2);
+        pill.position.set(this.col * gRadius * 2 + gRadius, dotPosY * gRadius * 2 + gRadius, gRadius / 2);
         pacmanScene.scene.add(pill);
       }
+      pills.push(pill);
       game.map.posY[dotPosY].posX[this.col].mesh = pill;
     });
   });
 };
 
-function renderContent() {
-  // Figures
-  pacman = new Pacman();
-  pinky = new Ghost("pinky", 7, 7, 2, 2);
-  inky = new Ghost("inky", 8, 7, 13, 11);
-  blinky = new Ghost("blinky", 9, 7, 13, 0);
-  clyde = new Ghost("clyde", 10, 7, 2, 11);
-
-  pacmanScene.scene.add(pacman.currMesh);
-  pacmanScene.scene.add(pinky.meshContainer);
-  pacmanScene.scene.add(blinky.meshContainer);
-  pacmanScene.scene.add(inky.meshContainer);
-  pacmanScene.scene.add(clyde.meshContainer);
-
+function renderMap() {
   // Pills
+  pills = [];
+
   fillPills();
 
   // Walls
-  buildWalls();
+  if (!hasBuiltWall) {
+    buildWalls();
+    hasBuiltWall = true;
+  }
 }
 
 // Click events
@@ -207,25 +349,28 @@ function doKeyDown(evt) {
       evt.preventDefault();
     case 87:	// W pressed
       pacman.directionWatcher.set(up);
+      game.resume();
       break;
     case 40:	// DOWN Arrow Key pressed
       evt.preventDefault();
     case 83:	// S pressed
       pacman.directionWatcher.set(down);
+      game.resume();
       break;
     case 37:	// LEFT Arrow Key pressed
       evt.preventDefault();
     case 65:	// A pressed
       pacman.directionWatcher.set(left);
+      game.resume();
       break;
     case 39:	// RIGHT Arrow Key pressed
       evt.preventDefault();
     case 68:	// D pressed
       pacman.directionWatcher.set(right);
+      game.resume();
       break;
     case 78:	// N pressed
       if (!$('#playerName').is(':focus')) {
-        game.pause = 1;
         game.newGame();
       }
       break;
@@ -234,9 +379,10 @@ function doKeyDown(evt) {
       break;
     case 32:	// SPACE pressed -> pause Game
       evt.preventDefault();
-      if (!(game.gameOver == true)
-          && $('#game-content').is(':visible')
-      )  game.pauseResume();
+      if (!game.gameOver) {
+        game.pauseOrResume();
+        console.log(game.isPaused);
+      }
       break;
     case 13: 	// ENTER pressed
       if ($('#game-content').is(':visible')) addHighscore();
@@ -245,24 +391,33 @@ function doKeyDown(evt) {
 
 /************************************************** Game Constructors *************************************************/
 function Game() {
+  // Game state
   this.isInitialized = false;
-  this.soundfx = 0;
-  this.map;
-  this.pillCount;				// number of pills
+  this.isPaused = true;
   this.gameOver = false;
+  // Game info
+  this.pillCount;
+  this.score;
+  this.lives;
+  this.state;
+  // Ghost state
+  this.isGhostFrightened = false;
+  this.ghostFrightenedTimer = 240;
+  // 0 = Scatter, 1 = Chase
+  this.ghostMode = 0;
+  // decrements each animationLoop execution
+  this.ghostModeTimer = 200;
+  // Others
   this.width = 540;
   this.height = 390;
-
-  this.ghostFrightened = false;
-  this.ghostFrightenedTimer = 240;
-  this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
-  this.ghostModeTimer = 200;	// decrements each animationLoop execution
+  this.soundfx = 0;
+  this.map;
 
   /* Game Functions */
   this.startGhostFrightened = function () {
-    console.log("Enable ghost frightened...");
+    //console.log("Enable ghost frightened...");
 
-    this.ghostFrightened = true;
+    this.isGhostFrightened = true;
     this.ghostFrightenedTimer = 240;
     inky.dazzle();
     pinky.dazzle();
@@ -273,7 +428,7 @@ function Game() {
   this.disableGhostFrightened = function () {
     console.log("Disabled ghost frightened");
 
-    this.ghostFrightened = false;
+    this.isGhostFrightened = false;
     this.ghostFrigthenedTimer = 240;
     inky.undazzle();
     pinky.undazzle();
@@ -282,7 +437,7 @@ function Game() {
   };
 
   this.checkGhostMode = function () {
-    if (this.ghostFrightened) {
+    if (this.isGhostFrightened) {
       this.ghostFrightenedTimer--;
       if (this.ghostFrightenedTimer == 0) {
         this.disableGhostFrightened();
@@ -298,8 +453,8 @@ function Game() {
   };
 
   this.getMapContent = function (x, y) {
-    var maxX = this.width / PACMAN_RADIUS * 2 - 1;
-    var maxY = this.height / PACMAN_RADIUS * 2 - 1;
+    var maxX = this.width / gRadius * 2 - 1;
+    var maxY = this.height / gRadius * 2 - 1;
     if (x < 0) x = maxX + x;
     if (x > maxX) x = x - maxX;
     if (y < 0) y = maxY + y;
@@ -312,10 +467,6 @@ function Game() {
     return this.map.posY[y].posX[x].type;
   };
 
-  this.setMapContent = function (x, y, val) {
-    this.map.posY[y].posX[x].type = val;
-  };
-
   this.toggleSound = function () {
     this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0;
     $('#mute').toggle();
@@ -325,22 +476,21 @@ function Game() {
   };
 
   this.newGame = function () {
-    var r = confirm("Are you sure you want to restart?");
-    if (r) {
+    var res = confirm("Are you sure you want to restart?");
+    if (res) {
       console.log("new Game");
-      this.init(0);
+      this.init();
     }
-    this.pauseResume();
   };
 
-  this.pauseResume = function () {
-    if (!this.running) {
-      this.pause = false;
-      this.running = true;
-    } else if (this.pause) {
-      this.pause = false;
-    } else {
-    }
+  this.resume = function () {
+    this.isPaused = false;
+    this.state.refresh();
+  };
+
+  this.pauseOrResume = function () {
+    this.isPaused = !this.isPaused;
+    this.state.refresh();
   };
 
   this.initMap = function () {
@@ -661,41 +811,58 @@ function Game() {
     return count;
   };
 
-  this.init = function (state) {
+  this.init = function () {
     this.initMap();
 
     // Count pills
     this.pillCount = this.countPill();
 
-    if (state == 0) {
-      game.gameOver = false;
+    // Initialize the info
+    if (!this.isInitialized) {
+      this.score = new Score();
+      this.lives = new Lives();
+      this.state = new State();
     }
 
+    this.score.set(0);
+    this.lives.set(3);
+    this.state.refresh();
+
+    this.gameOver = false;
+    this.isPaused = true;
     this.isInitialized = true;
-    this.ghostFrightened = false;
+    this.isGhostFrightened = false;
     this.ghostFrightenedTimer = 240;
-    this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
-    this.ghostModeTimer = 200;	// decrements each animationLoop execution
+    // 0 = Scatter, 1 = Chase
+    this.ghostMode = 0;
+    // decrements each animationLoop execution
+    this.ghostModeTimer = 200;
 
-    renderContent();
+    renderMap();
 
-    // initalize Ghosts, avoid memory flooding
-    if (pinky === null || pinky === undefined) {
+    // Figures
+    if (pacman === undefined || pacman === null) {
       pacman = new Pacman();
-      pinky = new Ghost("pinky", 7, 5, 2, 2);
-      inky = new Ghost("inky", 8, 5, 13, 11);
-      blinky = new Ghost("blinky", 9, 5, 13, 0);
-      clyde = new Ghost("clyde", 10, 5, 2, 11);
-    } else {
-      //console.log("ghosts reset");
-      pacman.reset();
-      pinky.reset();
-      inky.reset();
-      blinky.reset();
-      clyde.reset();
+      pinky = new Ghost("pinky", 7, 7, 2, 2);
+      inky = new Ghost("inky", 8, 7, 13, 11);
+      blinky = new Ghost("blinky", 9, 7, 13, 0);
+      clyde = new Ghost("clyde", 10, 7, 2, 11);
+
+      pacmanScene.scene.add(pacman.currMesh);
+      pacmanScene.scene.add(pinky.meshContainer);
+      pacmanScene.scene.add(blinky.meshContainer);
+      pacmanScene.scene.add(inky.meshContainer);
+      pacmanScene.scene.add(clyde.meshContainer);
     }
 
-    blinky.start();	// blinky is the first to leave ghostHouse
+    pacman.reset();
+    pinky.reset();
+    inky.reset();
+    blinky.reset();
+    clyde.reset();
+
+    // blinky is the first to leave ghostHouse
+    blinky.start();
     inky.start();
     pinky.start();
     clyde.start();
@@ -703,7 +870,7 @@ function Game() {
 
   this.check = function () {
     if ((this.pillCount == 0) && game.running) {
-      // todo: end game
+      // todo: update end game info...
     }
   };
 
@@ -711,15 +878,16 @@ function Game() {
   };
 
   this.gameover = function () {
+    // todo: update end game info...
   };
 
   this.toPixelPos = function (gridPos) {
-    return gridPos * PACMAN_RADIUS * 2 + PACMAN_RADIUS;
+    return gridPos * gRadius * 2 + gRadius;
   };
 
   this.toGridPos = function (pixelPos) {
-    var pos = pixelPos - PACMAN_RADIUS;
-    return ((pos % (PACMAN_RADIUS * 2)) / (PACMAN_RADIUS * 2));
+    var pos = pixelPos - gRadius;
+    return ((pos % (gRadius * 2)) / (gRadius * 2));
   };
 }
 
@@ -729,12 +897,10 @@ function Figure() {
   this.currMesh;
   this.posX;
   this.posY;
-  this.speed;
   this.dirX = right.dirX;
   this.dirY = right.dirY;
   this.direction;
-  this.radius;
-  this.hasStopped = true;
+  this.isStopped = true;
   this.directionWatcher = new directionWatcher();
 
   this.getNextDirection = function () {
@@ -742,7 +908,7 @@ function Figure() {
   };
 
   this.checkDirectionChange = function () {
-    if ((this.inGrid() && (this.directionWatcher.get() == null)) || this.hasStopped ){
+    if ((this.inGrid() && (this.directionWatcher.get() == null)) || this.isStopped ){
       this.getNextDirection();
       this.start();
     }
@@ -754,10 +920,10 @@ function Figure() {
 
   // Check if the figure is in the grid perfectly
   this.inGrid = function () {
-    var x = this.posX - PACMAN_RADIUS;
-    var y = this.posY - PACMAN_RADIUS;
+    var x = this.posX - gRadius;
+    var y = this.posY - gRadius;
 
-    if ((x % (PACMAN_RADIUS * 2) === 0) && (y % (PACMAN_RADIUS * 2) === 0)) return true;
+    if ((x % (gRadius * 2) === 0) && (y % (gRadius * 2) === 0)) return true;
     return false;
   };
 
@@ -769,27 +935,27 @@ function Figure() {
   };
 
   this.start = function () {
-      this.hasstopped = false;
+      this.isStopped = false;
   };
 
   this.stop = function () {
-    this.hasstopped = true;
+    this.isStopped = true;
   };
 
   this.getGridPosX = function (posX) {
     if (!posX) {
       posX = this.posX;
     }
-    var x = posX - PACMAN_RADIUS;
-    return (x - (x % (PACMAN_RADIUS * 2))) / (PACMAN_RADIUS * 2);
+    var x = posX - gRadius;
+    return (x - (x % (gRadius * 2))) / (gRadius * 2);
   };
 
   this.getGridPosY = function (posY) {
     if (!posY) {
       posY = this.posY;
     }
-    var y = posY - PACMAN_RADIUS;
-    return (y - (y % (PACMAN_RADIUS * 2))) / (PACMAN_RADIUS * 2);
+    var y = posY - gRadius;
+    return (y - (y % (gRadius * 2))) / (gRadius * 2);
   };
 
   this.setDirection = function (dir) {
@@ -798,7 +964,6 @@ function Figure() {
     this.direction = dir;
   };
 
-  //TODO: ???
   this.setPosition = function (x, y) {
     this.posX = x;
     this.posY = y;
@@ -808,9 +973,8 @@ function Figure() {
 // Pacman Constructor
 function Pacman() {
   this.currMesh = meshes.pacman;
-  this.radius = PACMAN_RADIUS;
-  this.posX = PACMAN_RADIUS;
-  this.posY = 6 * 2 * PACMAN_RADIUS + PACMAN_RADIUS;
+  this.posX = gRadius;
+  this.posY = 6 * 2 * gRadius + gRadius;
   this.speed = 5;
   this.dirX = right.dirX;
   this.dirY = right.dirY;
@@ -822,13 +986,12 @@ function Pacman() {
   this.beastMode = false;
   this.beastModeTimer = 0;
 
-  this.currMesh.position.set(this.posX, this.posY, 0);
-
   this.getCenterX = function () {
-    return this.posX + this.radius;
+    return this.posX + gRadius;
   };
+
   this.getCenterY = function () {
-    return this.posY + this.radius;
+    return this.posY + gRadius;
   };
 
   this.move = function () {
@@ -841,14 +1004,14 @@ function Pacman() {
       }
 
       // Appear from the opposite side or simply move forward
-      if (this.dirX === 1 && this.posX === game.width - PACMAN_RADIUS) {
-        this.posX = PACMAN_RADIUS;
-      } else if (this.dirX === -1 && this.posX === PACMAN_RADIUS) {
-        this.posX = game.width - PACMAN_RADIUS;
-      } else if (this.dirY === 1 && this.posY === game.height - PACMAN_RADIUS) {
-        this.posY = PACMAN_RADIUS;
-      } else if (this.dirY === -1 && this.posY === PACMAN_RADIUS) {
-        this.posY = game.height - PACMAN_RADIUS;
+      if (this.dirX === 1 && this.posX === game.width - gRadius) {
+        this.posX = gRadius;
+      } else if (this.dirX === -1 && this.posX === gRadius) {
+        this.posX = game.width - gRadius;
+      } else if (this.dirY === 1 && this.posY === game.height - gRadius) {
+        this.posY = gRadius;
+      } else if (this.dirY === -1 && this.posY === gRadius) {
+        this.posY = game.height - gRadius;
       } else {
         this.posX += this.speed * this.dirX;
         this.posY += this.speed * this.dirY;
@@ -861,10 +1024,10 @@ function Pacman() {
   this.checkCollisions = function () {
     // Check it's not stuck and frozen
     if ((this.stuckX == 0) && (this.stuckY == 0) && this.isDead == false) {
-      if ((this.dirX === -1 && this.posX === PACMAN_RADIUS)
-          || (this.dirX === 1 && this.posX === game.width - PACMAN_RADIUS)
-          || (this.dirY === -1 && this.posY === PACMAN_RADIUS)
-          || (this.dirY === 1 && this.posY === game.height - PACMAN_RADIUS)) {
+      if ((this.dirX === -1 && this.posX === gRadius)
+          || (this.dirX === 1 && this.posX === game.width - gRadius)
+          || (this.dirY === -1 && this.posY === gRadius)
+          || (this.dirY === 1 && this.posY === game.height - gRadius)) {
         return;
       }
 
@@ -879,8 +1042,8 @@ function Pacman() {
       // get the field 1 ahead to check wall collisions
       if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
       if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
-      if ((this.dirX == -1) && ((this.posX - PACMAN_RADIUS) % (PACMAN_RADIUS * 2) === 0)) gridAheadX -= 1;
-      if ((this.dirY == -1) && ((this.posY - PACMAN_RADIUS) % (PACMAN_RADIUS * 2) === 0)) gridAheadY -= 1;
+      if ((this.dirX == -1) && ((this.posX - gRadius) % (gRadius * 2) === 0)) gridAheadX -= 1;
+      if ((this.dirY == -1) && ((this.posY - gRadius) % (gRadius * 2) === 0)) gridAheadY -= 1;
       var fieldAhead = game.getMapContent(gridAheadX, gridAheadY);
 
       // Check Pill Collision
@@ -897,11 +1060,11 @@ function Pacman() {
             Sound.play("powerpill");
             this.enableBeastMode();
             game.startGhostFrightened();
-          }
-          else {
+          } else {
             Sound.play("waka");
             game.pillCount--;
           }
+          game.score.add(1);
           game.map.posY[gridY].posX[gridX].type = "null";
           pacmanScene.scene.remove(game.map.posY[gridY].posX[gridX].mesh);
         }
@@ -933,10 +1096,10 @@ function Pacman() {
           // check if possible to change direction without getting stuck
           var x = this.getGridPosX() + this.directionWatcher.get().dirX;
           var y = this.getGridPosY() + this.directionWatcher.get().dirY;
-          if (x <= -1) x = game.width / (this.radius * 2) - 1;
-          if (x >= game.width / (this.radius * 2)) x = 0;
-          if (y <= -1) x = game.height / (this.radius * 2) - 1;
-          if (y >= game.height / (this.radius * 2)) y = 0;
+          if (x <= -1) x = game.width / (gRadius * 2) - 1;
+          if (x >= game.width / (gRadius * 2)) x = 0;
+          if (y <= -1) x = game.height / (gRadius * 2) - 1;
+          if (y >= game.height / (gRadius * 2)) y = 0;
 
           var nextTile = game.map.posY[y].posX[x].type;
 
@@ -983,30 +1146,26 @@ function Pacman() {
 
   this.reset = function () {
     this.isDead = false;
-    this.posX = this.radius;
-    this.posY = 6 * 2 * this.radius + this.radius;
+    this.posX = gRadius;
+    this.posY = 6 * 2 * gRadius + gRadius;
+    this.currMesh.position.set(this.posX, this.posY, 0);
     this.setDirection(right);
     this.stuckX = 0;
     this.stuckY = 0;
   };
 
   this.die = function () {
-    if (!this.isDead) {
-      Sound.play("die");
-      this.freeze();
-      blinky.stop();
-      inky.stop();
-      pinky.stop();
-      clyde.stop();
-    }
-  };
-
-  this.dieFinal = function () {
+    Sound.play("die");
     this.reset();
     pinky.reset();
     inky.reset();
     blinky.reset();
     clyde.reset();
+    game.lives.minus(1);
+    if (game.lives.isFinalDead()) {
+      game.gameOver = true;
+      game.state.refresh();
+    }
   };
 }
 Pacman.prototype = new Figure();
@@ -1031,25 +1190,22 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
   this.meshContainer = new THREE.Object3D;
   this.normalMesh = this.meshes.normal;
   this.dizzyMesh = this.meshes.dizzy;
-  this.eyesMesh = meshes.eyes;
+  this.eyesMesh = this.meshes.eyes;
   this.name = name;
-  this.posX = gridPosX * PACMAN_RADIUS * 2 + PACMAN_RADIUS;
-  this.posY = gridPosY * PACMAN_RADIUS * 2 + PACMAN_RADIUS;
-  this.startPosX = gridPosX * PACMAN_RADIUS * 2 + PACMAN_RADIUS;
-  this.startPosY = gridPosY * PACMAN_RADIUS * 2 + PACMAN_RADIUS;
+  this.posX = gridPosX * gRadius * 2 + gRadius;
+  this.posY = gridPosY * gRadius * 2 + gRadius;
+  this.startPosX = gridPosX * gRadius * 2 + gRadius;
+  this.startPosY = gridPosY * gRadius * 2 + gRadius;
   this.gridBaseX = gridBaseX;
   this.gridBaseY = gridBaseY;
   this.speed = 5;
   this.direction = right;
-  this.radius = PACMAN_RADIUS;
   this.ghostHouse = true;
   this.dazzled = false;
 
-  this.meshContainer.add(this.normalMesh);
-  this.meshContainer.position.set(this.posX, this.posY, 0);
-
   this.dazzle = function () {
     this.meshContainer.remove(this.normalMesh);
+    this.meshContainer.remove(this.eyesMesh);
     this.meshContainer.add(this.dizzyMesh);
     this.changeSpeed(3);
     // ensure ghost doesn't leave grid
@@ -1060,6 +1216,7 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
 
   this.undazzle = function () {
     this.meshContainer.remove(this.dizzyMesh);
+    this.meshContainer.remove(this.eyesMesh);
     this.meshContainer.add(this.normalMesh);
     // only change speed if ghost is not "dead"
     if (!this.dead) this.changeSpeed(5);
@@ -1070,22 +1227,23 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
   };
 
   this.getCenterX = function () {
-    return this.posX + this.radius;
+    return this.posX + gRadius;
   };
 
   this.getCenterY = function () {
-    return this.posY + this.radius;
+    return this.posY + gRadius;
   };
 
   this.reset = function () {
-    this.meshContainer.remove(this.eyesMesh);
-    this.meshContainer.remove(this.dizzyMesh);
-    this.meshContainer.add(this.normalMesh);
     this.dead = false;
     this.posX = this.startPosX;
     this.posY = this.startPosY;
     this.ghostHouse = true;
-    this.hasStopped = false;
+    this.isStopped = false;
+    this.meshContainer.remove(this.dizzyMesh);
+    this.meshContainer.remove(this.eyesMesh);
+    this.meshContainer.add(this.normalMesh);
+    this.meshContainer.position.set(this.posX, this.posY, 0);
     this.undazzle();
   };
 
@@ -1118,17 +1276,17 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
       // Clyde does not start chasing before 2/3 of all pills are eaten
       if (this.name === "clyde") {
         if ((game.pillCount > 104 / 3)) {
-          this.hasStopped = true;
+          this.isStopped = true;
         } else {
-          this.hasStopped = false;
+          this.isStopped = false;
         }
       }
       // Inky starts after 30 pills
       if (this.name === "inky") {
         if ((game.pillCount > 104 - 30)) {
-          this.hasStopped = true;
+          this.isStopped = true;
         } else {
-          this.hasStopped = false;
+          this.isStopped = false;
         }
       }
 
@@ -1143,22 +1301,22 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
     }
 
     if (this.dead && this.posX === this.startPosX && this.posY === this.startPosY) {
-      this.hasStopped = true;
+      this.isStopped = true;
       if (!this.dazzled) {
         this.reset();
       }
     }
 
-    if (!this.hasStopped) {
+    if (!this.isStopped) {
       // Appear from the opposite side or simply move forward
-      if (this.dirX === 1 && this.posX === game.width - PACMAN_RADIUS) {
-        this.posX = PACMAN_RADIUS;
-      } else if (this.dirX === -1 && this.posX === PACMAN_RADIUS) {
-        this.posX = game.width - PACMAN_RADIUS;
-      } else if (this.dirY === 1 && this.posY === game.height - PACMAN_RADIUS) {
-        this.posY = PACMAN_RADIUS;
-      } else if (this.dirY === -1 && this.posY === PACMAN_RADIUS) {
-        this.posY = game.height - PACMAN_RADIUS;
+      if (this.dirX === 1 && this.posX === game.width - gRadius) {
+        this.posX = gRadius;
+      } else if (this.dirX === -1 && this.posX === gRadius) {
+        this.posX = game.width - gRadius;
+      } else if (this.dirY === 1 && this.posY === game.height - gRadius) {
+        this.posY = gRadius;
+      } else if (this.dirY === -1 && this.posY === gRadius) {
+        this.posY = game.height - gRadius;
       } else {
         this.posX += this.speed * this.dirX;
         this.posY += this.speed * this.dirY;
@@ -1170,7 +1328,7 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
 
   this.checkCollision = function () {
     /* Check Back to Home */
-    if (this.dead && (this.getGridPosX() === this.startPosX / (PACMAN_RADIUS * 2)) && (this.getGridPosY() === this.startPosY / (PACMAN_RADIUS * 2))) {
+    if (this.dead && (this.getGridPosX() === this.startPosX / (gRadius * 2)) && (this.getGridPosY() === this.startPosY / (gRadius * 2))) {
       this.reset();
     } else {
       /* Check Ghost / Pacman Collision			*/
@@ -1199,8 +1357,8 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
       targetGridY = this.getGridPosX(this.startPosY);
     } else if (game.ghostMode == 0) {
       // Scatter Mode
-      targetGridX = (this.gridBaseX - PACMAN_RADIUS) / (PACMAN_RADIUS * 2);
-      targetGridY = (this.gridBaseY - PACMAN_RADIUS) / (PACMAN_RADIUS * 2);
+      targetGridX = (this.gridBaseX - gRadius) / (gRadius * 2);
+      targetGridY = (this.gridBaseY - gRadius) / (gRadius * 2);
     } else if (game.ghostMode == 1) {
       // Chase Mode
       switch (this.name) {
@@ -1286,31 +1444,6 @@ function Ghost(name, gridPosX, gridPosY, gridBaseX, gridBaseY) {
 }
 Ghost.prototype = new Figure();
 
-/************************************************* Game initialization ************************************************/
-$(document).ready(function () {
-  // --------------- Control
-  // Keyboard
-  window.addEventListener('keydown', doKeyDown, true);
-  $('#canvas-container').click(function () {
-    if (!(game.gameOver == true))  game.pauseResume();
-  });
-  // Menu
-  $(document).on('click', '.button#newGame', function (event) {
-    game.newGame();
-  });
-  // toggleSound
-  $(document).on('click', '.controlSound', function (event) {
-    game.toggleSound();
-  });
-
-  //game.initMap();
-  pacmanScene = new PacmanScene();
-  pacmanScene.init('pacman');
-
-  // Initialize the game
-  game.init(0);
-});
-
 /************************************************ Support Three.js code ***********************************************/
 window.time = 0;
 window.SimpleScene = function () {
@@ -1330,11 +1463,33 @@ window.SimpleScene = function () {
     var NEAR = 0.1;
     var FAR = 20000;
 
-    // set up camera
     var camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     camera.position.set(0, 0, 1000);
     camera.lookAt(new THREE.Vector3(270, 195, 0));
     this.scene.add(camera);
+
+    ///////////
+    // Title //
+    ///////////
+    var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff03 } );
+    var materialSide = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+    var materialArray = [ materialFront, materialSide ];
+    var titleGeometry = new THREE.TextGeometry( "PACMAN",
+        {
+          size: 30, height: 4, curveSegments: 3,
+          font: "helvetiker", weight: "bold", style: "normal",
+          bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+          material: 0, extrudeMaterial: 1
+        });
+
+    var titleMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var titleMesh = new THREE.Mesh(titleGeometry, titleMaterial );
+
+    titleGeometry.computeBoundingBox();
+    var textWidth = titleGeometry.boundingBox.max.x - titleGeometry.boundingBox.min.x;
+
+    titleMesh.position.set(270 - textWidth / 2, 450, 0);
+    this.scene.add(titleMesh);
 
     //////////////
     // Renderer //
@@ -1347,8 +1502,12 @@ window.SimpleScene = function () {
     // Controls //
     //////////////
     this.controls = new THREE.OrbitControls( camera, renderer.domElement );
+    THREEx.WindowResize(renderer, camera);
     for (var i = 0; i < 135; i++) {
       this.controls.pan(new THREE.Vector3(1, 0, 0));
+    }
+    for (var i = 0; i < 35; i++) {
+      this.controls.pan(new THREE.Vector3(0, 1, 0));
     }
 
     // CALL THE USER'S SETUP FUNCTION JUST ONCE.
@@ -1405,7 +1564,7 @@ function PacmanScene() {
     this.controls.update();
 
     refreshCount++;
-    if (refreshCount >= gameSpeed && !game.gameOver && game.isInitialized) {
+    if (refreshCount >= gameSpeed && !game.gameOver && !game.isPaused && game.isInitialized) {
       refreshCount = 0;
       // Make changes before next loop
       pacman.move();
@@ -1425,3 +1584,28 @@ function PacmanScene() {
   };
 }
 PacmanScene.prototype = new SimpleScene;
+
+/************************************************* Game initialization ************************************************/
+$(document).ready(function () {
+  // --------------- Control
+  // Keyboard
+  window.addEventListener('keydown', doKeyDown, true);
+  $('#canvas-container').click(function () {
+    if (!game.gameOver) game.pauseResume();
+  });
+  // Menu
+  $(document).on('click', '.button#newGame', function (event) {
+    game.newGame();
+  });
+  // toggleSound
+  $(document).on('click', '.controlSound', function (event) {
+    game.toggleSound();
+  });
+
+  //game.initMap();
+  pacmanScene = new PacmanScene();
+  pacmanScene.init('pacman');
+
+  // Initialize the game
+  game.init();
+});
