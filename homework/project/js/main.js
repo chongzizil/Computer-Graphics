@@ -1674,4 +1674,7 @@ $(document).ready(function () {
 
   pacmanScene.init('pacman');
   game.init();
+
+  // Set the sound on at first...
+  game.toggleSound();
 });
