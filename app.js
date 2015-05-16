@@ -56,14 +56,14 @@ app.config(['$routeProvider',
         when('/hw4/WoodTexture', {
           templateUrl: 'homework/hw4/WoodTexture.html'
         }).
-        // HW5
+      // HW5
         when('/hw5/', {
           templateUrl: 'homework/hw5/hw5.html'
         }).
         when('/hw5/Cubes', {
           templateUrl: 'homework/hw5/Cubes.html'
         }).
-        // HW6
+      // HW6
         when('/hw6/Parametric', {
           templateUrl: 'homework/hw6/Parametric.html'
         }).
@@ -73,16 +73,18 @@ app.config(['$routeProvider',
         when('/hw6/matchMan', {
           templateUrl: 'homework/hw6/matchMan.html'
         }).
-        // HW7
+      // HW7
         when('/hw7/HW7', {
           templateUrl: 'homework/hw7/HW7.html'
         }).
         when('/hw7/CurveEditor', {
           templateUrl: 'homework/hw7/CurveEditor.html'
         }).
+      // HW8
         when('/hw8/HW8', {
           templateUrl: 'homework/hw8/HW8.html'
         }).
+      // Term project
         when('/project/pacman', {
           templateUrl: 'homework/project/pacman.html'
         }).
