@@ -23,7 +23,7 @@ PacmanFigureObjects = function (options) {
   if (options.type === 'pacman') {
     texture = THREE.ImageUtils.loadTexture("homework/project/images/pacman_face.png");
     geometry = new THREE.SphereGeometry(options.radius, 32, 32);
-    material = new THREE.MeshBasicMaterial({map: texture});
+    material = new THREE.MeshPhongMaterial({map: texture});
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.y += options.radius;
     container.add(mesh)
@@ -54,14 +54,14 @@ PacmanFigureObjects = function (options) {
 
     // Create the head
     geometry = new THREE.SphereGeometry(options.radius, 32, 32);
-    material = new THREE.MeshBasicMaterial({map: texture});
+    material = new THREE.MeshPhongMaterial({map: texture});
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = options.radius;
     container.add(mesh);
 
     // Create the body
     geometry = new THREE.CylinderGeometry(options.radius, options.radius, options.radius);
-    material = new THREE.MeshBasicMaterial({color: color});
+    material = new THREE.MeshPhongMaterial({color: color});
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = options.radius / 2;
     container.add(mesh)
@@ -69,14 +69,14 @@ PacmanFigureObjects = function (options) {
     texture = THREE.ImageUtils.loadTexture("homework/project/images/eye.png");
     // Right eye
     geometry = new THREE.SphereGeometry(options.radius / 4, 32, 32);
-    material = new THREE.MeshBasicMaterial({map: texture});
+    material = new THREE.MeshPhongMaterial({map: texture});
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.x = options.radius / 2;
     mesh.position.y = options.radius * 1.75;
     container.add(mesh);
     // Left eye
     geometry = new THREE.SphereGeometry(options.radius / 4, 32, 32);
-    material = new THREE.MeshBasicMaterial({map: texture});
+    material = new THREE.MeshPhongMaterial({map: texture});
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.x = -options.radius / 2;
     mesh.position.y = options.radius * 1.75;
